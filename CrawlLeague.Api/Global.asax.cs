@@ -12,7 +12,7 @@ namespace CrawlLeague.Api
     public class AppHost : AppHostBase
     {
 
-        public AppHost() : base("REST Files", typeof(TestService).Assembly) { }
+        public AppHost() : base("REST Files", typeof(LeagueService).Assembly) { }
         
         public override void Configure(Container container)
         {
@@ -32,10 +32,10 @@ namespace CrawlLeague.Api
                 "Server=127.0.0.1;Port=5432;User Id=postgres;Password=test123;Database=testDb;Pooling=true;MinPoolSize=0;MaxPoolSize=200",
                 PostgreSqlDialect.Provider));
 
-            using (var db = container.Resolve<IDbConnectionFactory>().Open())
-            {
-                db.DropAndCreateTable<Test>();
-            }
+            //using (var db = container.Resolve<IDbConnectionFactory>().Open())
+            //{
+            //    db.DropAndCreateTable<Test>();
+            //}
         }
     }
 
