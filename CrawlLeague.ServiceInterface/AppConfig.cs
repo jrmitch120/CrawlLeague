@@ -1,5 +1,5 @@
-﻿using ServiceStack.Configuration;
-
+﻿using System.Collections.Generic;
+using ServiceStack.Configuration;
 
 namespace CrawlLeague.ServiceInterface
 {
@@ -12,5 +12,7 @@ namespace CrawlLeague.ServiceInterface
         public AppConfig(IAppSettings resources)
         {
         }
+        
+        public IList<string> ReadWriteApiKeys { get; set; }
     }
 }
