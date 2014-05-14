@@ -16,7 +16,7 @@ namespace CrawlLeague.ServiceInterface
             return new ServersResponse
             {
                 Servers = Db.Select<Server>(q => q.Limit(skip: (page - 1)*Paging.PageSize, rows: Paging.PageSize)),
-                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count<Season>())}
+                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count<Server>())}
             };
         }
 
@@ -28,6 +28,40 @@ namespace CrawlLeague.ServiceInterface
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Server {0} does not exist. ".Fmt(request.Id)));
 
             return new ServerResponse { Server = server };
+        }
+
+        public HttpResult Post(CreateServer request)
+        {
+            var newId = Db.Insert((Server)request, selectIdentity: true);
+
+            return new HttpResult(new ServerResponse { Server = Db.SingleById<Server>(newId) })
+            {
+                StatusCode = HttpStatusCode.Created,
+                Headers =
+                {
+                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
+                }
+            };
+        }
+
+        public HttpResult Put(UpdateServer request)
+        {
+            int result = Db.Update((Server)request);
+
+            if (result == 0)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Server {0} does not exist. ".Fmt(request.Id)));
+
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
+        }
+
+        public HttpResult Delete(DeleteServer request)
+        {
+            int result = Db.DeleteById<Server>(request.Id);
+
+            if (result == 0)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Server {0} does not exist. ".Fmt(request.Id)));
+
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

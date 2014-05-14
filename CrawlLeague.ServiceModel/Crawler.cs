@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ServiceStack.DataAnnotations;
 
 namespace CrawlLeague.ServiceModel
 {
-    public class Crawler : ICreated
+    public class Crawler : IAudit
     {
         [AutoIncrement]
         public int Id { get; set; }
@@ -17,5 +13,6 @@ namespace CrawlLeague.ServiceModel
         // TODO, division...
 
         public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

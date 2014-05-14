@@ -21,4 +21,33 @@ namespace CrawlLeague.ServiceModel.Operations
         [ApiMember(Name = "Id", Description = "Server Id", ParameterType = "path", DataType = "int", IsRequired = true)]
         public int Id { get; set; }
     }
+
+    [Api("Service Description 1")]
+    [Route("/servers", "POST", Summary = @"CREATE a new crawl server",
+        Notes = "This will create a new crawl server.")]
+    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class CreateServer : Server, IReturn<ServerResponse> { }
+
+    [Route("/servers/{Id}", "PUT", Summary = @"UPDATE a specific crawl server.",
+        Notes = "This will update a crawl server.")]
+    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class UpdateServer : Server
+    {
+        [ApiMember(Name = "Id", Description = "Server Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public override int Id { get; set; }
+    }
+
+    [Route("/servers/{Id}", "DELETE", Summary = @"DELETE a specific crawl server.",
+        Notes = "This will delete a crawl server perminatly.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NotFound, "Server was not found.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class DeleteServer
+    {
+        [ApiMember(Name = "Id", Description = "Server Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int Id { get; set; }
+    }
 }

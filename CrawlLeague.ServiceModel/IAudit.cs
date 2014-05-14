@@ -2,8 +2,9 @@
 
 namespace CrawlLeague.ServiceModel
 {
-    public interface IAudit :ICreated
+    public interface IAudit 
     {
+        DateTime CreatedDate { get; set; }
         DateTime ModifiedDate { get; set; }
     }
 }

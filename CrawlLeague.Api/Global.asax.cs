@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Web;
 using CrawlLeague.ServiceInterface;
 using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceInterface.Validation;
@@ -25,6 +26,7 @@ namespace CrawlLeague.Api
             Plugins.Add(new CorsFeature());
             Plugins.Add(new SwaggerFeature());
             Plugins.Add(new ValidationFeature());
+            Plugins.Add(new PostmanFeature());
 
             var config = new AppConfig
             {
@@ -44,13 +46,18 @@ namespace CrawlLeague.Api
             SetConfig(new HostConfig { DefaultRedirectPath = "/swagger-ui/" });
 
             container.RegisterValidators(typeof(CreateSeasonValidator).Assembly);
-            container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
+            //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
+            
+            container.Register<IDbConnectionFactory>(
+                new OrmLiteConnectionFactory(HttpContext.Current.Server.MapPath("~/App_Data/leaguedata.sqlite"),
+                    SqliteDialect.Provider));
 
             //container.Register<IDbConnectionFactory>(
             //    new OrmLiteConnectionFactory(
             //    "Server=127.0.0.1;Port=5432;User Id=postgres;Password=test123;Database=testDb;Pooling=true;MinPoolSize=0;MaxPoolSize=200",
             //    PostgreSqlDialect.Provider));
 
+            
             using (var db = container.Resolve<IDbConnectionFactory>().Open())
             {
                 db.DropAndCreateTable<Season>();

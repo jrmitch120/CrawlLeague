@@ -16,10 +16,10 @@ namespace CrawlLeague.ServiceInterface.Validation
                 validator.RuleFor(r => r.Description).NotEmpty();
                 validator.RuleFor(r => r.DaysPerRound).GreaterThan(2);
                 validator.RuleFor(r => r.CrawlVersion).NotEmpty();
-                validator.RuleFor(r => r.Start).GreaterThan(DateTime.Now);
+                validator.RuleFor(r => r.Start).GreaterThan(DateTime.UtcNow);
                 validator.RuleFor(r => r.End)
                     .Cascade(CascadeMode.StopOnFirstFailure)
-                    .GreaterThan(r => DateTime.Now)
+                    .GreaterThan(r => DateTime.UtcNow)
                     .GreaterThan(r => r.Start);
             });
         }
