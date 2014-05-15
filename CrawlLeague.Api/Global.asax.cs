@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
+using CrawlLeague.Core.Scrapping;
+using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface;
 using CrawlLeague.ServiceInterface.RequestFilters;
-using CrawlLeague.ServiceInterface.Validation;
 using CrawlLeague.ServiceModel;
 using Funq;
 using ServiceStack;
@@ -45,9 +46,12 @@ namespace CrawlLeague.Api
 
             SetConfig(new HostConfig { DefaultRedirectPath = "/swagger-ui/" });
 
-            container.RegisterValidators(typeof(CreateSeasonValidator).Assembly);
+            container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
+            container.RegisterAutoWiredAs<WebScraper, IScraper>();
+            container.RegisterAutoWiredTypes(new[] {typeof (CrawlerValidator)});
+
             //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
-            
+
             container.Register<IDbConnectionFactory>(
                 new OrmLiteConnectionFactory(HttpContext.Current.Server.MapPath("~/App_Data/leaguedata.sqlite"),
                     SqliteDialect.Provider));
@@ -66,7 +70,7 @@ namespace CrawlLeague.Api
         }
     }
 
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
         {

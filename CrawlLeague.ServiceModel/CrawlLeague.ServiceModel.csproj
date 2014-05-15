@@ -47,10 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crawler.cs" />
+    <Compile Include="DataAnnotations\CreatedDescriptionAttribute.cs" />
     <Compile Include="Division.cs" />
     <Compile Include="IAudit.cs" />
+    <Compile Include="Operations\CrawlerOperations.cs" />
+    <Compile Include="Operations\CrawlerResponses.cs" />
     <Compile Include="Operations\ServerResponses.cs" />
     <Compile Include="Operations\ServerOperations.cs" />
+    <Compile Include="DataAnnotations\ModifiedDescriptionAttribute.cs" />
     <Compile Include="Util\Paging.cs" />
     <Compile Include="Season.cs" />
     <Compile Include="Operations\SeasonResponses.cs" />

@@ -77,6 +77,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CrawlLeague.Core\CrawlLeague.Core.csproj">
+      <Project>{de3d3a36-8b8b-4c5f-857c-c9488788c081}</Project>
+      <Name>CrawlLeague.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CrawlLeague.ServiceModel\CrawlLeague.ServiceModel.csproj">
       <Project>{7f7ddc7e-4518-41a3-8f2b-7de575029b6b}</Project>
       <Name>CrawlLeague.ServiceModel</Name>

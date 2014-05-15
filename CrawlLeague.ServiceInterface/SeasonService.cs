@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Util;

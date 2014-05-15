@@ -149,6 +149,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CrawlLeague.Core\CrawlLeague.Core.csproj">
+      <Project>{de3d3a36-8b8b-4c5f-857c-c9488788c081}</Project>
+      <Name>CrawlLeague.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CrawlLeague.ServiceInterface\CrawlLeague.ServiceInterface.csproj">
       <Project>{fcd89665-7078-42b6-8f50-1d973014a030}</Project>
       <Name>CrawlLeague.ServiceInterface</Name>
