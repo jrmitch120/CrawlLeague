@@ -14,10 +14,15 @@ namespace CrawlLeague.Core.Verification
 
         public bool ValidateRcInit(Uri rcfile)
         {
-            var result = _scraper.Scrape(new ScraperRequest {Uri = rcfile});
+            var result =
+                _scraper.Scrape(new ScraperRequest
+                {
+                    Uri = rcfile,
+                    Options = new ScrapperOptions {Range = new ByteRange(0, 500)}
+                });
 
             if (result.Success)
-                return (result.Body.IndexOf("#CrawlLeague Enabled",StringComparison.CurrentCultureIgnoreCase) >= 0);
+                return (result.Body.IndexOf("# CrawlLeague Enabled",StringComparison.CurrentCultureIgnoreCase) >= 0);
 
             return (false);
         }

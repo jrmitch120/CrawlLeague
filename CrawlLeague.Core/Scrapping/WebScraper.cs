@@ -29,7 +29,7 @@ namespace CrawlLeague.Core.Scrapping
                     {
                         Uri = req.Uri,
                         Success = true,
-                        Body = _runner.Fetch(req.Uri)
+                        Body = _runner.Fetch(req.Uri, req.Options)
                     };
 
                     responses.TryAdd(current.Key, response);
