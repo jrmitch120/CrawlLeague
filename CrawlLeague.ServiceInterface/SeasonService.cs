@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using CrawlLeague.Core.Verification;
+using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Util;
@@ -16,7 +16,7 @@ namespace CrawlLeague.ServiceInterface
             int page = request.Page ?? 1;
             return new SeasonsResponse
             {
-                Seasons = Db.Select<Season>(q => q.Limit(skip: (page - 1)*Paging.PageSize, rows: Paging.PageSize)),
+                Seasons = Db.Select<Season>(q => q.Page(page)),
                 Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count<Season>())}
             };
         }

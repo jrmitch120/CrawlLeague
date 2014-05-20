@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Net;
+using System.Collections.Generic;
 using CrawlLeague.Core.Verification;
+using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Util;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -15,6 +17,22 @@ namespace CrawlLeague.ServiceInterface
         public CrawlerService(CrawlerValidator validator)
         {
             _validator = validator;
+        }
+
+        public CrawlersResponse Get(FetchCrawlers request)
+        {
+            int page = request.Page ?? 1;
+            var crawlers = new List<Crawler>();
+
+            crawlers.AddRange(request.Name != null
+                ? Db.Select<Crawler>(x => x.Where(c => c.UserName == request.Name).Page(page))
+                : Db.Select<Crawler>(q => q.Page(page)));
+
+            return new CrawlersResponse
+            {
+                Crawlers = crawlers,
+                Paging = new Paging { Page = page, TotalCount = Convert.ToInt32(Db.Count<Crawler>()) }
+            };
         }
 
         public HttpResult Post(CreateCrawler request)
