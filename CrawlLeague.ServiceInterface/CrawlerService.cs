@@ -25,8 +25,8 @@ namespace CrawlLeague.ServiceInterface
             var crawlers = new List<Crawler>();
 
             crawlers.AddRange(request.Name != null
-                ? Db.Select<Crawler>(x => x.Where(c => c.UserName == request.Name).Page(page))
-                : Db.Select<Crawler>(q => q.Page(page)));
+                ? Db.Select<Crawler>(x => x.Where(c => c.UserName == request.Name).PageTo(page))
+                : Db.Select<Crawler>(q => q.PageTo(page)));
 
             return new CrawlersResponse
             {
