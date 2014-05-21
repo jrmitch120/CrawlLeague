@@ -8,8 +8,8 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class FetchCrawlers : IReturn<CrawlersResponse>
     {
-        [ApiMember(Name = "Name", Description = "Name of crawler", ParameterType = "query", DataType = "string", IsRequired = false)]
-        public string Name { get; set; }
+        [ApiMember(Name = "UserName", Description = "UserName of crawler", ParameterType = "query", DataType = "string", IsRequired = false)]
+        public string UserName { get; set; }
         
         [ApiMember(Name = "Page", Description = "Current page", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int? Page { get; set; }
@@ -28,7 +28,9 @@ namespace CrawlLeague.ServiceModel.Operations
     [Route("/crawlers", "POST", Summary = @"CREATE a new crawler account",
         Notes = "This will create a new crawler account.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Conflict, "UserName already exists.")]
+    [ApiResponse(HttpStatusCode.Forbidden, "Valid .rc file not foud.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class CreateCrawler : Server, IReturn<ServerResponse> { }
+    public class CreateCrawler : Crawler, IReturn<CrawlerResponse> { }
     
 }

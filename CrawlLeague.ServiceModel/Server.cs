@@ -15,13 +15,13 @@ namespace CrawlLeague.ServiceModel
         [Description("Commonly accepted server shorthand")]
         public string Abbreviation { get; set; }
 
-        [Description("Base address of the server")]
-        public string Address { get; set; }
+        [Description("Url of the server")]
+        public string Url { get; set; }
 
-        [Description("Base address of the server's .rc files")]
+        [Description("Url of the server's .rc files")]
         public string RcUrl { get; set; }
 
-        [Description("Base address of the server's morque list")]
+        [Description("Url of the server's morque list")]
         public string MorgueUrl { get; set; }
 
         [Description("Designates an active or inactive server")]

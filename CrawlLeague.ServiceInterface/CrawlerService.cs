@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
@@ -22,36 +24,47 @@ namespace CrawlLeague.ServiceInterface
         public CrawlersResponse Get(FetchCrawlers request)
         {
             int page = request.Page ?? 1;
-            var crawlers = new List<Crawler>();
 
-            crawlers.AddRange(request.Name != null
-                ? Db.Select<Crawler>(x => x.Where(c => c.UserName == request.Name).PageTo(page))
-                : Db.Select<Crawler>(q => q.PageTo(page)));
+            var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Crawler>();
+
+            if (request.UserName != null) // TODO Wildcard search
+                visitor.Where(c => c.UserName.ToUpper() == request.UserName.ToUpper());
+            
+            visitor.PageTo(page);
 
             return new CrawlersResponse
             {
-                Crawlers = crawlers,
-                Paging = new Paging { Page = page, TotalCount = Convert.ToInt32(Db.Count<Crawler>()) }
+                Crawlers = Db.Select(visitor),
+                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count(visitor))}
             };
         }
 
         public HttpResult Post(CreateCrawler request)
         {
-            //TODO!!
-            //var serverSrv = TryResolve<ServerService>();
-            _validator.ValidateRcInit(new Uri("http://crawl.berotato.org/crawl/rcfiles/crawl-0.14/shobalk.rc"));
+            CrawlersResponse crawlersResp = Get(new FetchCrawlers { UserName = request.UserName });
 
-            return null;
-            //var newId = Db.Insert((Server)request, selectIdentity: true);
+            if (crawlersResp.Crawlers.Any())
+                throw new HttpError(HttpStatusCode.Conflict,
+                    new ArgumentException("UserName {0} already exists. ".Fmt(request.UserName)));
 
-            //return new HttpResult(new CrawlerResponse { Crawler = Db.SingleById<Crawler>(newId) })
-            //{
-            //    StatusCode = HttpStatusCode.Created,
-            //    Headers =
-            //    {
-            //        {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
-            //    }
-            //};
+            var serverSrv = TryResolve<ServerService>();
+            ServerResponse serverResp = serverSrv.Get(new FetchServer {Id = request.ServerId});
+
+            if(!_validator.ValidateRcInit(new Uri(serverResp.Server.RcUrl.Fmt("crawl-git",request.UserName))))
+                throw new HttpError(HttpStatusCode.Forbidden,
+                    new ArgumentException("UserName {0} does not have a valid .rc file. ".Fmt(request.UserName)));
+
+            //return null;
+            var newId = Db.Insert((Crawler)request, selectIdentity: true);
+
+            return new HttpResult(new CrawlerResponse { Crawler = Db.SingleById<Crawler>(newId) })
+            {
+                StatusCode = HttpStatusCode.Created,
+                Headers =
+                {
+                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
+                }
+            };
         }
     }
 }

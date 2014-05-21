@@ -11,6 +11,7 @@ using Funq;
 using ServiceStack;
 using ServiceStack.Api.Swagger;
 using ServiceStack.Data;
+using ServiceStack.MiniProfiler;
 using ServiceStack.OrmLite;
 using ServiceStack.Validation;
 
@@ -23,7 +24,7 @@ namespace CrawlLeague.Api
         
         public override void Configure(Container container)
         {
-            Plugins.RemoveAll(x => x is MetadataFeature); 
+            //Plugins.RemoveAll(x => x is MetadataFeature); 
             Plugins.Add(new CorsFeature());
             Plugins.Add(new SwaggerFeature());
             Plugins.Add(new ValidationFeature());
@@ -64,9 +65,25 @@ namespace CrawlLeague.Api
             
             using (var db = container.Resolve<IDbConnectionFactory>().Open())
             {
-                db.DropAndCreateTable<Season>();
-                db.DropAndCreateTable<Server>();
+                db.CreateTableIfNotExists<Season>();
+                db.CreateTableIfNotExists<Server>();
+                db.CreateTableIfNotExists<Crawler>();
             }
+
+
+            OrmLiteConfig.InsertFilter = (dbCmd, row) =>
+            {
+                var auditRow = row as IAudit;
+                if (auditRow != null)
+                    auditRow.CreatedDate = auditRow.ModifiedDate = DateTime.UtcNow;
+            };
+
+            OrmLiteConfig.UpdateFilter = (dbCmd, row) =>
+            {
+                var auditRow = row as IAudit;
+                if (auditRow != null)
+                    auditRow.ModifiedDate = DateTime.UtcNow;
+            };
         }
     }
 
@@ -76,6 +93,17 @@ namespace CrawlLeague.Api
         {
             //Initialize your application
             (new AppHost()).Init();
+        }
+
+        protected void Application_BeginRequest(object src, EventArgs e)
+        {
+            if (Request.IsLocal)
+                Profiler.Start();
+        }
+
+        protected void Application_EndRequest(object src, EventArgs e)
+        {
+            Profiler.Stop();
         }
     }
 }

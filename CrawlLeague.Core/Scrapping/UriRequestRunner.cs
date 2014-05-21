@@ -16,7 +16,7 @@ namespace CrawlLeague.Core.Scrapping
             WebResponse response = request.GetResponse();
 
             TextReader body = new StreamReader(response.GetResponseStream());
-            var test = body.ReadToEnd();
+            
             return (body.ReadToEnd());
         }
     }
