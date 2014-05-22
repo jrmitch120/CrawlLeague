@@ -7,6 +7,7 @@ using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface;
 using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceModel;
+using CrawlLeague.ServiceModel.Operations;
 using Funq;
 using ServiceStack;
 using ServiceStack.Api.Swagger;
@@ -38,7 +39,9 @@ namespace CrawlLeague.Api
 
             GlobalRequestFilters.Add((req, res, requestDto) =>
             {
-                if (req.Verb.ContainsAny(new[] {"DELETE", "PUT", "POST"}))
+                if (!req.IsLocal && 
+                    requestDto.GetType() != typeof (CreateCrawler) &&
+                    req.Verb.ContainsAny(new[] {"DELETE", "PUT", "POST"}))
                 {
                     var keyValidator = new ApiKeyAttribute();
                     keyValidator.Execute(req, res, requestDto);

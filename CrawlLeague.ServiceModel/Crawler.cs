@@ -7,7 +7,7 @@ namespace CrawlLeague.ServiceModel
     public class Crawler : IAudit
     {
         [AutoIncrement]
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         [Index(Unique = true)]
         [Description("Crawler's user name.  Must match a user name on an active crawl server")]
@@ -21,8 +21,14 @@ namespace CrawlLeague.ServiceModel
         [Description("Division that the crawler is slotted into as of the last recalculation")]
         public int DivisionId { get; set; }
 
-        [Description("Designates an active or inactive crawler")]
+        [Description("Active or inactive crawler")]
         public bool Active { get; set; }
+
+        [Description("Has the crawler been banned")]
+        public bool Banned { get; set; }
+
+        [Description("Reason for a banning")]
+        public bool BanReason { get; set; }
 
         [Created]
         public DateTime CreatedDate { get; set; }

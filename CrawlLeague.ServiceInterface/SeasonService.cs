@@ -33,7 +33,7 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Post(CreateSeason request)
         {
-            var newId = Db.Insert((Season)request, selectIdentity:true);
+            var newId = Db.Insert((Season)request.SanitizeDtoHtml(), selectIdentity: true);
 
             return new HttpResult(new SeasonResponse { Season = Db.SingleById<Season>(newId) })
             {
@@ -47,7 +47,7 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Put(UpdateSeason request)
         {
-            int result = Db.Update((Season)request);
+            int result = Db.Update((Season)request.SanitizeDtoHtml());
 
             if (result == 0)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Season {0} does not exist. ".Fmt(request.Id)));

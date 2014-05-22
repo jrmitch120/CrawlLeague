@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using CrawlLeague.Core.Verification;
@@ -20,11 +19,12 @@ namespace CrawlLeague.ServiceInterface
         {
             _validator = validator;
         }
-
+        
         public CrawlersResponse Get(FetchCrawlers request)
         {
             int page = request.Page ?? 1;
 
+            // Expression visitor to build query dynamically
             var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Crawler>();
 
             if (request.UserName != null) // TODO Wildcard search
@@ -41,20 +41,20 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Post(CreateCrawler request)
         {
+            // Check for existing UserName
             CrawlersResponse crawlersResp = Get(new FetchCrawlers { UserName = request.UserName });
 
             if (crawlersResp.Crawlers.Any())
                 throw new HttpError(HttpStatusCode.Conflict,
                     new ArgumentException("UserName {0} already exists. ".Fmt(request.UserName)));
 
-            var serverSrv = TryResolve<ServerService>();
-            ServerResponse serverResp = serverSrv.Get(new FetchServer {Id = request.ServerId});
+            // Get crawl server data
+            var serverResp = TryResolve<ServerService>().Get(new FetchServer {Id = request.ServerId});
 
-            if(!_validator.ValidateRcInit(new Uri(serverResp.Server.RcUrl.Fmt("crawl-git",request.UserName))))
+            if (!_validator.ValidateRcInit(new Uri(serverResp.Server.RcUrl.Fmt("crawl-git", request.UserName))))
                 throw new HttpError(HttpStatusCode.Forbidden,
                     new ArgumentException("UserName {0} does not have a valid .rc file. ".Fmt(request.UserName)));
 
-            //return null;
             var newId = Db.Insert((Crawler)request, selectIdentity: true);
 
             return new HttpResult(new CrawlerResponse { Crawler = Db.SingleById<Crawler>(newId) })
@@ -65,6 +65,16 @@ namespace CrawlLeague.ServiceInterface
                     {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
                 }
             };
+        }
+
+        public HttpResult Put(UpdateCrawler request)
+        {
+            int result = Db.Update((Crawler)request.SanitizeDtoHtml());
+
+            if (result == 0)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
+
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
     }
 }

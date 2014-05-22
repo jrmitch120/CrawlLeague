@@ -4,6 +4,7 @@ using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Util;
+
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -33,7 +34,8 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Post(CreateServer request)
         {
-            var newId = Db.Insert((Server)request, selectIdentity: true);
+            
+            var newId = Db.Insert((Server)request.SanitizeDtoHtml(), selectIdentity: true);
 
             return new HttpResult(new ServerResponse { Server = Db.SingleById<Server>(newId) })
             {
@@ -47,7 +49,7 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Put(UpdateServer request)
         {
-            int result = Db.Update((Server)request);
+            int result = Db.Update((Server)request.SanitizeDtoHtml());
 
             if (result == 0)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Server {0} does not exist. ".Fmt(request.Id)));

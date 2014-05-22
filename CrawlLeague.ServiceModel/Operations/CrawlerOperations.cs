@@ -30,7 +30,27 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Conflict, "UserName already exists.")]
     [ApiResponse(HttpStatusCode.Forbidden, "Valid .rc file not foud.")]
-    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    //[ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class CreateCrawler : Crawler, IReturn<CrawlerResponse> { }
-    
+
+    [Route("/crawlers/{Id}", "PUT", Summary = @"UPDATE a specific crawler.",
+        Notes = "This will update a crawler.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class UpdateCrawler : Crawler
+    {
+        [ApiMember(Name = "Id", Description = "Crawler Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public override int Id { get; set; }
+    }
+
+    [Route("/crawlers/{Id}", "DELETE", Summary = @"DELETE a specific crawler.",
+        Notes = "This will delete a crawler perminatly.")]
+    [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NotFound, "Crawler was not found.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class DeleteCrawler
+    {
+        [ApiMember(Name = "Id", Description = "Crawler Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int Id { get; set; }
+    }
 }
