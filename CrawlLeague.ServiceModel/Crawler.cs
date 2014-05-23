@@ -28,7 +28,7 @@ namespace CrawlLeague.ServiceModel
         public bool Banned { get; set; }
 
         [Description("Reason for a banning")]
-        public bool BanReason { get; set; }
+        public string BanReason { get; set; }
 
         [Created]
         public DateTime CreatedDate { get; set; }

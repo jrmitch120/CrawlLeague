@@ -76,5 +76,15 @@ namespace CrawlLeague.ServiceInterface
 
             return new HttpResult { StatusCode = HttpStatusCode.NoContent };
         }
+
+        public HttpResult Delete(DeleteCrawler request)
+        {
+            int result = Db.DeleteById<Crawler>(request.Id);
+
+            if (result == 0)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
+
+            return new HttpResult { StatusCode = HttpStatusCode.NoContent };
+        }
     }
 }

@@ -3,6 +3,7 @@ using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
 {
+    [Api("Service Description 1")]
     [Route("/seasons", "GET", Summary = @"GET a list of seasons.",
         Notes = "This will returned a paged list of seasons.")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
@@ -22,7 +23,6 @@ namespace CrawlLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
-    [Api("Service Description 1")]
     [Route("/seasons", "POST", Summary = @"CREATE a new season",
         Notes = "This will create a new season.  Subject to field validation.")]
     [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]

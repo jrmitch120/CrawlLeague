@@ -52,12 +52,14 @@
     <Compile Include="IAudit.cs" />
     <Compile Include="Operations\CrawlerOperations.cs" />
     <Compile Include="Operations\CrawlerResponses.cs" />
+    <Compile Include="Operations\SeasonOperations.cs" />
+    <Compile Include="Operations\DivisionResponses.cs" />
     <Compile Include="Operations\ServerResponses.cs" />
     <Compile Include="Operations\ServerOperations.cs" />
     <Compile Include="DataAnnotations\ModifiedDescriptionAttribute.cs" />
     <Compile Include="Season.cs" />
     <Compile Include="Operations\SeasonResponses.cs" />
-    <Compile Include="Operations\SeasonOperations.cs" />
+    <Compile Include="Operations\DivisionOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Util\Paging.cs" />

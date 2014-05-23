@@ -3,6 +3,7 @@ using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
 {
+    [Api("Service Description 1")]
     [Route("/servers", "GET", Summary = @"GET a list of dungeon crawl servers.",
         Notes = "This will returned a paged list of dungeon crawl servers.")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
@@ -22,7 +23,6 @@ namespace CrawlLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
-    [Api("Service Description 1")]
     [Route("/servers", "POST", Summary = @"CREATE a new crawl server",
         Notes = "This will create a new crawl server.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]

@@ -71,8 +71,8 @@ namespace CrawlLeague.Api
                 db.CreateTableIfNotExists<Season>();
                 db.CreateTableIfNotExists<Server>();
                 db.CreateTableIfNotExists<Crawler>();
+                db.CreateTableIfNotExists<Division>();
             }
-
 
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
             {

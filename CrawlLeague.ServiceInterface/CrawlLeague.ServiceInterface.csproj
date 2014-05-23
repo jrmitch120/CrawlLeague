@@ -68,6 +68,7 @@
     <Compile Include="Extensions\OrmExtensions.cs" />
     <Compile Include="Extensions\UtilityExtensions.cs" />
     <Compile Include="RequestFilters\ApiKeyAttribute.cs" />
+    <Compile Include="DivisionService.cs" />
     <Compile Include="ServerService.cs" />
     <Compile Include="CrawlerService.cs" />
     <Compile Include="SeasonService.cs" />
