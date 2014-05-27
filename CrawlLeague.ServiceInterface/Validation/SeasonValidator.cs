@@ -10,10 +10,9 @@ namespace CrawlLeague.ServiceInterface.Validation
     {
         public static void GetRules(AbstractValidator<T> validator)
         {
-            validator.RuleSet(ApplyTo.Post, () =>
+            validator.RuleSet(ApplyTo.Post | ApplyTo.Put, () =>
             {
                 validator.RuleFor(r => r.Name).NotEmpty();
-                validator.RuleFor(r => r.Description).NotEmpty();
                 validator.RuleFor(r => r.DaysPerRound).GreaterThan(2);
                 validator.RuleFor(r => r.CrawlVersion).NotEmpty();
                 validator.RuleFor(r => r.Start).GreaterThan(DateTime.UtcNow);

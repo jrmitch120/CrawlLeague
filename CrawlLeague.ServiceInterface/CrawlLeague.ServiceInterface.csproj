@@ -74,6 +74,9 @@
     <Compile Include="SeasonService.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\CrawlerValidator.cs" />
+    <Compile Include="Validation\DivisionValidator.cs" />
+    <Compile Include="Validation\ServerValidator.cs" />
     <Compile Include="Validation\SeasonValidator.cs" />
   </ItemGroup>
   <ItemGroup>

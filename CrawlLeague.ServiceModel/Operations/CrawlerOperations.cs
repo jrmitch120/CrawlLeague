@@ -26,15 +26,16 @@ namespace CrawlLeague.ServiceModel.Operations
     }
 
     [Route("/crawlers", "POST", Summary = @"CREATE a new crawler account",
-        Notes = "This will create a new crawler account.")]
+        Notes = "This will create a new crawler account.  Subject to field validation.")]
+    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Conflict, "UserName already exists.")]
     [ApiResponse(HttpStatusCode.Forbidden, "Valid .rc file not foud.")]
-    //[ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class CreateCrawler : Crawler, IReturn<CrawlerResponse> { }
 
     [Route("/crawlers/{Id}", "PUT", Summary = @"UPDATE a specific crawler.",
-        Notes = "This will update a crawler.")]
+        Notes = "This will update a crawler.  Subject to field validation.")]
+    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class UpdateCrawler : Crawler

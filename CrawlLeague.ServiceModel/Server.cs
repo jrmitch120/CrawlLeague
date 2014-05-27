@@ -1,4 +1,5 @@
 ﻿using System;
+using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
 namespace CrawlLeague.ServiceModel
@@ -27,10 +28,10 @@ namespace CrawlLeague.ServiceModel
         [Description("Designates an active or inactive server")]
         public bool Active { get; set; }
 
-        [Description("When the server was created (UTC)")]
+        [Created]
         public DateTime CreatedDate { get; set; }
 
-        [Description("Last time the server was modified (UTC)")]
+        [Modified]
         public DateTime ModifiedDate { get; set; }
     }
 }
