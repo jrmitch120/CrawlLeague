@@ -8,13 +8,13 @@ namespace CrawlLeague.ServiceModel.Types
         public int Id { get; set; }
 
         [Index(Unique = true)]
-        [Description("Crawler's user name.  Must match a user name on an active crawl server")]
+        [Description("Crawler's user name.")]
         public string UserName { get; set; }
 
         [Description("Link to the server that the crawler is currently bound to")]
         public string ServerRef { get; set; }
 
-        [Description("Link to the division that the crawler is slotted into as of the last recalculation")]
+        [Description("Link to the division that the crawler is slotted into as of the last divison realignment")]
         public string DivisionRef { get; set; }
 
         [Description("Active or inactive crawler")]

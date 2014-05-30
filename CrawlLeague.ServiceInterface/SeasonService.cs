@@ -17,7 +17,7 @@ namespace CrawlLeague.ServiceInterface
             return new SeasonsResponse
             {
                 Seasons = Db.Select<Season>(q => q.PageTo(page)),
-                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count<Season>())}
+                Paging = new Paging(Request.AbsoluteUri) {Page = page, TotalCount = Convert.ToInt32(Db.Count<Season>())}
             };
         }
 

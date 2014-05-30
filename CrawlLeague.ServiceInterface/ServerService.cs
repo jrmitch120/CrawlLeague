@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using CrawlLeague.ServiceInterface.Extensions;
-using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 using CrawlLeague.ServiceModel.Util;
@@ -19,7 +18,7 @@ namespace CrawlLeague.ServiceInterface
             return new ServersResponse
             {
                 Servers = Db.Select<Server>(q => q.PageTo(page)),
-                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count<Server>())}
+                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Convert.ToInt32(Db.Count<Server>()) }
             };
         }
 

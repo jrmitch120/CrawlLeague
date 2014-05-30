@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using CrawlLeague.Core.Verification;
@@ -19,7 +20,17 @@ namespace CrawlLeague.ServiceInterface
         {
             _validator = validator;
         }
-        
+
+        private CrawlerHatoes Hatoes(Crawler crawler)
+        {
+            var hatoes = new CrawlerHatoes().PopulateWith(crawler);
+            
+            hatoes.DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = crawler.DivisionId }.ToGetUrl());
+            hatoes.ServerRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = crawler.ServerId }.ToGetUrl());
+
+            return (hatoes);
+        }
+
         public CrawlersResponse Get(FetchCrawlers request)
         {
             int page = request.Page ?? 1;
@@ -32,10 +43,15 @@ namespace CrawlLeague.ServiceInterface
             
             visitor.PageTo(page);
 
+            var results = Db.Select(visitor);
+            var crawlers = new List<CrawlerHatoes>();
+            
+            results.ForEach(r => crawlers.Add(Hatoes(r)));
+
             return new CrawlersResponse
             {
-                Crawlers = Db.Select(visitor),
-                Paging = new Paging {Page = page, TotalCount = Convert.ToInt32(Db.Count(visitor))}
+                Crawlers = crawlers,
+                Paging = new Paging(Request.AbsoluteUri) {Page = page, TotalCount = Convert.ToInt32(Db.Count(visitor))}
             };
         }
 
@@ -43,15 +59,10 @@ namespace CrawlLeague.ServiceInterface
         {
             var crawler = Db.SingleById<Crawler>(request.Id);
 
-            var test = new CrawlerHatoes().PopulateWith(crawler);
-            test.DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = crawler.DivisionId }.ToUrl());
-            test.ServerRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = crawler.ServerId }.ToUrl());
-
-            
             if (crawler == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
 
-            return new CrawlerResponse { Crawler = crawler };
+            return new CrawlerResponse { Crawler = Hatoes(crawler) };
         }
 
         public HttpResult Post(CreateCrawler request)
@@ -81,7 +92,7 @@ namespace CrawlLeague.ServiceInterface
 
             var newId = Db.Insert(crawler, selectIdentity: true);
 
-            return new HttpResult(new CrawlerResponse { Crawler = Db.SingleById<Crawler>(newId) })
+            return new HttpResult(new CrawlerResponse { Crawler = Hatoes(Db.SingleById<Crawler>(newId)) })
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =
