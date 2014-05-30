@@ -1,5 +1,5 @@
-﻿using CrawlLeague.ServiceModel;
-using CrawlLeague.ServiceModel.Operations;
+﻿using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.FluentValidation;
 

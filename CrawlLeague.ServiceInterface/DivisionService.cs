@@ -3,6 +3,7 @@ using System.Net;
 using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using CrawlLeague.ServiceModel.Util;
 
 using ServiceStack;
@@ -34,21 +35,25 @@ namespace CrawlLeague.ServiceInterface
 
         public HttpResult Post(CreateDivision request)
         {
-            var newId = Db.Insert((Division)request.SanitizeDtoHtml(), selectIdentity: true);
+            var division = new Division().PopulateWith(request.SanitizeDtoHtml());
+
+            var newId = Db.Insert(division, selectIdentity: true);
 
             return new HttpResult(new DivisionResponse { Division = Db.SingleById<Division>(newId) })
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =
                 {
-                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
+                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(newId)}
                 }
             };
         }
 
         public HttpResult Put(UpdateDivision request)
         {
-            int result = Db.Update((Division)request.SanitizeDtoHtml());
+            var division  = new Division().PopulateWith(request.SanitizeDtoHtml());
+
+            int result = Db.UpdateNonDefaults(division, d => d.Id == division.Id);
 
             if (result == 0)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Division {0} does not exist. ".Fmt(request.Id)));

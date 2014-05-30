@@ -8,6 +8,7 @@ using CrawlLeague.ServiceInterface;
 using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using Funq;
 using ServiceStack;
 using ServiceStack.Api.Swagger;
@@ -48,7 +49,7 @@ namespace CrawlLeague.Api
                 }
             });
 
-            SetConfig(new HostConfig { DefaultRedirectPath = "/swagger-ui/" });
+            SetConfig(new HostConfig {DefaultRedirectPath = "/swagger-ui/"});
 
             container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
             container.RegisterAutoWiredAs<WebScraper, IScraper>();
@@ -72,6 +73,7 @@ namespace CrawlLeague.Api
                 db.CreateTableIfNotExists<Server>();
                 db.CreateTableIfNotExists<Crawler>();
                 db.CreateTableIfNotExists<Division>();
+                db.CreateTableIfNotExists<Participant>();
             }
 
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>

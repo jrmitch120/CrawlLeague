@@ -3,6 +3,7 @@ using System.Net;
 using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using CrawlLeague.ServiceModel.Util;
 
 using ServiceStack;

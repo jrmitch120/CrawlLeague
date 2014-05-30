@@ -2,14 +2,22 @@
 using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
-namespace CrawlLeague.ServiceModel
+namespace CrawlLeague.ServiceModel.Types
 {
-    
-    public class Division : IAudit
+    public class Division : DivisionCore, IAudit
     {
         [AutoIncrement]
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
 
+        [Created]
+        public DateTime CreatedDate { get; set; }
+        
+        [Modified]
+        public DateTime ModifiedDate { get; set; }
+    }
+
+    public abstract class DivisionCore
+    {
         [Description("Name of the division")]
         public string Name { get; set; }
 
@@ -22,11 +30,5 @@ namespace CrawlLeague.ServiceModel
         [Description("What tier the division is.  Higher is more prestigous")]
         [Index(Unique = true)]
         public int Tier { get; set; }
-
-        [Created]
-        public DateTime CreatedDate { get; set; }
-        
-        [Modified]
-        public DateTime ModifiedDate { get; set; }
     }
 }

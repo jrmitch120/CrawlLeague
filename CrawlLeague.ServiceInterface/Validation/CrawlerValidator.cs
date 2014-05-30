@@ -1,11 +1,11 @@
-﻿using CrawlLeague.ServiceModel;
-using CrawlLeague.ServiceModel.Operations;
+﻿using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.FluentValidation;
 
 namespace CrawlLeague.ServiceInterface.Validation
 {
-    public static class CrawlerRules<T> where T : Crawler
+    public static class CrawlerRules<T> where T : CrawlerCore
     {
         public static void GetRules(AbstractValidator<T> validator)
         {

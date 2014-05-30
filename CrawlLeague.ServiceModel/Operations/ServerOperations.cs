@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
@@ -25,14 +26,14 @@ namespace CrawlLeague.ServiceModel.Operations
 
     [Route("/servers", "POST", Summary = @"CREATE a new crawl server",
         Notes = "This will create a new crawl server.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class CreateServer : Server, IReturn<ServerResponse> { }
 
     [Route("/servers/{Id}", "PUT", Summary = @"UPDATE a specific crawl server.",
         Notes = "This will update a crawl server.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class UpdateServer : Server

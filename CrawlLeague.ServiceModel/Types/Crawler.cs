@@ -2,13 +2,22 @@
 using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
-namespace CrawlLeague.ServiceModel
+namespace CrawlLeague.ServiceModel.Types
 {
-    public class Crawler : IAudit
+    public class Crawler : CrawlerCore, IAudit
     {
         [AutoIncrement]
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
 
+        [Created]
+        public DateTime CreatedDate { get; set; }
+
+        [Modified]
+        public DateTime ModifiedDate { get; set; }
+    }
+
+    public abstract class CrawlerCore
+    {
         [Index(Unique = true)]
         [Description("Crawler's user name.  Must match a user name on an active crawl server")]
         public string UserName { get; set; }
@@ -29,11 +38,5 @@ namespace CrawlLeague.ServiceModel
 
         [Description("Reason for a banning")]
         public string BanReason { get; set; }
-
-        [Created]
-        public DateTime CreatedDate { get; set; }
-
-        [Modified]
-        public DateTime ModifiedDate { get; set; }
     }
 }

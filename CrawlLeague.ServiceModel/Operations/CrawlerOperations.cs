@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
@@ -27,21 +28,21 @@ namespace CrawlLeague.ServiceModel.Operations
 
     [Route("/crawlers", "POST", Summary = @"CREATE a new crawler account",
         Notes = "This will create a new crawler account.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Conflict, "UserName already exists.")]
     [ApiResponse(HttpStatusCode.Forbidden, "Valid .rc file not foud.")]
-    public class CreateCrawler : Crawler, IReturn<CrawlerResponse> { }
+    public class CreateCrawler : CrawlerCore, IReturn<CrawlerResponse> { }
 
     [Route("/crawlers/{Id}", "PUT", Summary = @"UPDATE a specific crawler.",
         Notes = "This will update a crawler.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class UpdateCrawler : Crawler
+    public class UpdateCrawler : CrawlerCore
     {
         [ApiMember(Name = "Id", Description = "Crawler Id", ParameterType = "path", DataType = "int", IsRequired = true)]
-        public override int Id { get; set; }
+        public int Id { get; set; }
     }
 
     [Route("/crawlers/{Id}", "DELETE", Summary = @"DELETE a specific crawler.",

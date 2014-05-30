@@ -2,7 +2,7 @@
 using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
-namespace CrawlLeague.ServiceModel
+namespace CrawlLeague.ServiceModel.Types
 {
     public class Server : IAudit
     {

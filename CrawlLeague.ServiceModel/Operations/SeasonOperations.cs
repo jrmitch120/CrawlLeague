@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
@@ -23,16 +24,48 @@ namespace CrawlLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
+    [Route("/seasons/{Id}/status", "GET", Summary = @"GET a specific season's status.",
+        Notes = "This will return a season's status.")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NotFound, "Season was not found.")]
+    public class FetchSeasonStatus : IReturn<SeasonStatusResponse>
+    {
+        [ApiMember(Name = "Id", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int Id { get; set; }
+    }
+
+    [Route("/seasons/{SeasonId}/participants/{CrawlerId}/status", "GET", Summary = @"GET a specific participant's status.",
+        Notes = "This will return status for a participant.")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NotFound, "Season was not found.")]
+    public class FetchParticipant : IReturn<ParticipantResponse>
+    {
+        [ApiMember(Name = "SeasonId", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int SeasonId { get; set; }
+
+        [ApiMember(Name = "CrawlerId", Description = "Crawler Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int CrawlerId { get; set; }
+    }
+
     [Route("/seasons", "POST", Summary = @"CREATE a new season",
         Notes = "This will create a new season.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class CreateSeason : Season, IReturn<SeasonResponse> { }
 
+    [Route("/seasons/{Id}/participants", "POST", Summary = @"CREATE a new crawler participant for a season",
+        Notes = "This will create a crawler participant for a given season.  Subject to field validation.")]
+    [ApiResponse(422, "Validation error.")]
+    [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
+    public class CreateParticipant : ParticipantCore, IReturn<ParticipantResponse>
+    {
+    }
+
     [Route("/seasons/{Id}", "PUT", Summary = @"UPDATE a specific season.",
         Notes = "This will update a season.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class UpdateSeason : Season

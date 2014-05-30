@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
@@ -25,20 +26,22 @@ namespace CrawlLeague.ServiceModel.Operations
 
     [Route("/divisions", "POST", Summary = @"CREATE a new division",
         Notes = "This will create a new division.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class CreateDivision : Division, IReturn<DivisionResponse> { }
+    public class CreateDivision : DivisionCore, IReturn<DivisionResponse>
+    {
+    }
 
     [Route("/divisions/{Id}", "PUT", Summary = @"UPDATE a specific division.",
         Notes = "This will update a division.  Subject to field validation.")]
-    [ApiResponse(HttpStatusCode.BadRequest, "Validation error.")]
+    [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.NoContent, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class UpdateDivision : Division
+    public class UpdateDivision : DivisionCore
     {
         [ApiMember(Name = "Id", Description = "Division Id", ParameterType = "path", DataType = "int", IsRequired = true)]
-        public override int Id { get; set; }
+        public int Id { get; set; }
     }
 
     [Route("/divisions/{Id}", "DELETE", Summary = @"DELETE a specific division.",

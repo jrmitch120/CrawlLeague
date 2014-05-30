@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net;
 using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface.Extensions;
-using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using CrawlLeague.ServiceModel.Util;
 using ServiceStack;
 using ServiceStack.OrmLite;
@@ -39,8 +39,25 @@ namespace CrawlLeague.ServiceInterface
             };
         }
 
+        public CrawlerResponse Get(FetchCrawler request)
+        {
+            var crawler = Db.SingleById<Crawler>(request.Id);
+
+            var test = new CrawlerHatoes().PopulateWith(crawler);
+            test.DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = crawler.DivisionId }.ToUrl());
+            test.ServerRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = crawler.ServerId }.ToUrl());
+
+            
+            if (crawler == null)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
+
+            return new CrawlerResponse { Crawler = crawler };
+        }
+
         public HttpResult Post(CreateCrawler request)
         {
+            var crawler = new Crawler().PopulateWith(request.SanitizeDtoHtml());
+
             // Check for existing UserName
             CrawlersResponse crawlersResp = Get(new FetchCrawlers { UserName = request.UserName });
 
@@ -52,7 +69,7 @@ namespace CrawlLeague.ServiceInterface
             var divisionResp = TryResolve<DivisionService>().Get(new FetchDivision { Id = request.DivisionId });
 
             if (!divisionResp.Division.Joinable)
-                throw new HttpError(HttpStatusCode.BadGateway, 
+                throw new HttpError(HttpStatusCode.BadRequest, 
                     new ArgumentException("Division {0} is not joinable. ".Fmt(request.UserName)));
 
             // Validate .rc file for the server
@@ -62,21 +79,23 @@ namespace CrawlLeague.ServiceInterface
                 throw new HttpError(HttpStatusCode.Forbidden,
                     new ArgumentException("UserName {0} does not have a valid .rc file. ".Fmt(request.UserName)));
 
-            var newId = Db.Insert((Crawler)request, selectIdentity: true);
+            var newId = Db.Insert(crawler, selectIdentity: true);
 
             return new HttpResult(new CrawlerResponse { Crawler = Db.SingleById<Crawler>(newId) })
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =
                 {
-                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
+                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(newId)}
                 }
             };
         }
 
         public HttpResult Put(UpdateCrawler request)
         {
-            int result = Db.Update((Crawler)request.SanitizeDtoHtml());
+            var crawler = new Crawler().PopulateWith(request.SanitizeDtoHtml());
+
+            int result = Db.UpdateNonDefaults(crawler, c => c.Id == crawler.Id);
 
             if (result == 0)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));

@@ -1,6 +1,6 @@
 ﻿using System;
-using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
+using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.FluentValidation;
 
@@ -13,6 +13,7 @@ namespace CrawlLeague.ServiceInterface.Validation
             validator.RuleSet(ApplyTo.Post | ApplyTo.Put, () =>
             {
                 validator.RuleFor(r => r.Name).NotEmpty();
+                validator.RuleFor(r => r.Description).NotEmpty();
                 validator.RuleFor(r => r.DaysPerRound).GreaterThan(2);
                 validator.RuleFor(r => r.CrawlVersion).NotEmpty();
                 validator.RuleFor(r => r.Start).GreaterThan(DateTime.UtcNow);

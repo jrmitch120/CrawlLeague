@@ -2,9 +2,9 @@
 using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
-namespace CrawlLeague.ServiceModel
+namespace CrawlLeague.ServiceModel.Types
 {
-    public class SeasonalCrawler : IAudit
+    public class Game : IAudit
     {
         [AutoIncrement]
         public virtual int Id { get; set; }
@@ -17,9 +17,11 @@ namespace CrawlLeague.ServiceModel
         [Description("Id of the season to join")]
         public int SeasonId { get; set; }
 
-        [ForeignKey(typeof(Division))]
-        [Description("Id of the division to join")]
-        public int DivisionId { get; set; }
+        [Description("Full morgue file")]
+        public string Morgue { get; set; }
+
+        [Description("Crawl league calculated score")]
+        public int Score { get; set; }
 
         [Created]
         public DateTime CreatedDate { get; set; }

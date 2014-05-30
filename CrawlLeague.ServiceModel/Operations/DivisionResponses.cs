@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CrawlLeague.ServiceModel.Types;
 using CrawlLeague.ServiceModel.Util;
 using ServiceStack;
 
