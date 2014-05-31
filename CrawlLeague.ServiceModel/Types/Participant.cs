@@ -11,7 +11,10 @@ namespace CrawlLeague.ServiceModel.Types
         public virtual int Id { get; set; }
 
         [Description("Curent total score for the season")]
-        public DateTime Score { get; set; }
+        public int Score { get; set; }
+
+        [Description("Number of games played during the season")]
+        public int GamesPlayed { get; set; }
 
         [Created]
         public DateTime CreatedDate { get; set; }

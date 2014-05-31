@@ -11,13 +11,34 @@ namespace CrawlLeague.ServiceInterface
 {
     public class SeasonService : Service
     {
+        private ParticipantStatusHatoes ParitipantStatusHatoes(ParticipantStatus participant)
+        {
+            var hatoes = new ParticipantStatusHatoes().PopulateWith(participant);
+
+            hatoes.DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = participant.DivisionId }.ToGetUrl());
+            hatoes.SeasonRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = participant.SeasonId }.ToGetUrl());
+
+            return (hatoes);
+        }
+
         public SeasonsResponse Get(FetchSeasons request)
         {
             int page = request.Page ?? 1;
+
+            // Expression visitor to build query dynamically
+            var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Season>();
+
+            if (request.InProgress )
+                visitor.Where(s => s.Start <= DateTime.UtcNow && s.End >= DateTime.UtcNow);
+
+            visitor.OrderByDescending(s => s.Start);
+
+            var count = Convert.ToInt32(Db.Count(visitor));
+
             return new SeasonsResponse
             {
-                Seasons = Db.Select<Season>(q => q.PageTo(page)),
-                Paging = new Paging(Request.AbsoluteUri) {Page = page, TotalCount = Convert.ToInt32(Db.Count<Season>())}
+                Seasons = Db.Select(visitor.PageTo(page)),
+                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = count }
             };
         }
 
@@ -55,6 +76,7 @@ namespace CrawlLeague.ServiceInterface
                 null,
                 d => new {DivisionName = d.Name});
             jn.Where<Participant>(x => x.CrawlerId == request.CrawlerId && request.SeasonId == x.SeasonId);
+            
             var result = Db.Single<ParticipantStatus>(jn.ToSql());
 
             if (result == null)
@@ -62,7 +84,7 @@ namespace CrawlLeague.ServiceInterface
 
             return new ParticipantResponse
             {
-                ParticipantStatus = result,
+                ParticipantStatus = ParitipantStatusHatoes(result)
             };
         }
 
@@ -89,6 +111,10 @@ namespace CrawlLeague.ServiceInterface
             if (seasonResp.Season.End < DateTime.UtcNow)
                 throw new HttpError(HttpStatusCode.BadRequest,
                     new ArgumentException("Season {0} ended on {1}.".Fmt(seasonResp.Season.Id, seasonResp.Season.End)));
+
+            if (seasonResp.Season.Start > DateTime.UtcNow)
+                throw new HttpError(HttpStatusCode.BadRequest,
+                    new ArgumentException("Season {0} starts on {1}.".Fmt(seasonResp.Season.Id, seasonResp.Season.Start)));
 
             var newId = Db.Insert(request, selectIdentity: true);
 

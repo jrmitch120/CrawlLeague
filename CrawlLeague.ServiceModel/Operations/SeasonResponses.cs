@@ -45,7 +45,7 @@ namespace CrawlLeague.ServiceModel.Operations
 
     public class ParticipantResponse : IHasResponseStatus
     {
-        public ParticipantStatus ParticipantStatus { get; set; }
+        public ParticipantStatusHatoes ParticipantStatus { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
 

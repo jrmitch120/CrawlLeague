@@ -1,5 +1,4 @@
-﻿using System;
-using CrawlLeague.ServiceModel.Util;
+﻿using CrawlLeague.ServiceModel.Util;
 using ServiceStack.OrmLite;
 
 namespace CrawlLeague.ServiceInterface.Extensions

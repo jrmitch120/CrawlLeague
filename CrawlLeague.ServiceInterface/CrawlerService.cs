@@ -38,12 +38,11 @@ namespace CrawlLeague.ServiceInterface
             // Expression visitor to build query dynamically
             var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Crawler>();
 
-            if (request.UserName != null) // TODO Wildcard search
+            if (!request.UserName.IsNullOrEmpty()) // TODO Wildcard search
                 visitor.Where(c => c.UserName.ToUpper() == request.UserName.ToUpper());
-            
-            visitor.PageTo(page);
 
-            var results = Db.Select(visitor);
+            var count = Convert.ToInt32(Db.Count(visitor));
+            var results = Db.Select(visitor.PageTo(page));
             var crawlers = new List<CrawlerHatoes>();
             
             results.ForEach(r => crawlers.Add(Hatoes(r)));
@@ -51,7 +50,7 @@ namespace CrawlLeague.ServiceInterface
             return new CrawlersResponse
             {
                 Crawlers = crawlers,
-                Paging = new Paging(Request.AbsoluteUri) {Page = page, TotalCount = Convert.ToInt32(Db.Count(visitor))}
+                Paging = new Paging(Request.AbsoluteUri) {Page = page, TotalCount = count}
             };
         }
 

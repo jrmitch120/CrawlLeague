@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 
@@ -62,7 +63,7 @@ namespace CrawlLeague.ServiceModel.Util
         {
             if (string.IsNullOrEmpty(url)) return null;
 
-            if(url.Contains(key+"="))
+            if(url.IndexOf(key+"=", StringComparison.OrdinalIgnoreCase) > -1)
                 return Regex.Replace(url, @"(?<=[ \?|&]" + key + "=)[^&?]*", val.ToString(), RegexOptions.IgnoreCase);
             
             var prefix = url.IndexOf('?') == -1 ? "?" : "&";

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
@@ -10,6 +11,9 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class FetchSeasons : IReturn<SeasonsResponse>
     {
+        [ApiMember(Name = "InProgress", Description = "Seasons that are currently in progress", ParameterType = "query", DataType = "boolean", IsRequired = false)]
+        public bool InProgress { get; set; }
+
         [ApiMember(Name = "Page", Description = "Current page", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int? Page { get; set; }
     }
