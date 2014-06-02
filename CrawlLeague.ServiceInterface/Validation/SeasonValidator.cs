@@ -6,7 +6,7 @@ using ServiceStack.FluentValidation;
 
 namespace CrawlLeague.ServiceInterface.Validation
 {
-    public static class SeasonRules<T> where T : Season
+    public static class SeasonRules<T> where T : SeasonCore
     {
         public static void GetRules(AbstractValidator<T> validator)
         {

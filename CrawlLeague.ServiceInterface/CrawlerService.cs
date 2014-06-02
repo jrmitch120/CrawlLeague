@@ -24,9 +24,12 @@ namespace CrawlLeague.ServiceInterface
         private CrawlerHatoes Hatoes(Crawler crawler)
         {
             var hatoes = new CrawlerHatoes().PopulateWith(crawler);
-            
-            hatoes.DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = crawler.DivisionId }.ToGetUrl());
-            hatoes.ServerRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = crawler.ServerId }.ToGetUrl());
+
+            hatoes.References.DivisionRef =
+                Request.GetBaseUrl().CombineWith(new FetchDivision {Id = crawler.DivisionId}.ToGetUrl());
+
+            hatoes.References.ServerRef =
+                Request.GetBaseUrl().CombineWith(new FetchServer {Id = crawler.ServerId}.ToGetUrl());
 
             return (hatoes);
         }

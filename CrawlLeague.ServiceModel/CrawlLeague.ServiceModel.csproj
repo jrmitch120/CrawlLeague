@@ -50,6 +50,7 @@
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />
     <Compile Include="Types\ParticipantStatus.cs" />
+    <Compile Include="Types\ParticipantStatusHatoes.cs" />
     <Compile Include="Types\RoundInformation.cs" />
     <Compile Include="Types\SeasonStatus.cs" />
     <Compile Include="Types\Participant.cs" />

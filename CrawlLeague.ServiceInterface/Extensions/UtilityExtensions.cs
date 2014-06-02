@@ -9,7 +9,6 @@ namespace CrawlLeague.ServiceInterface.Extensions
     {
         public static T SanitizeDtoHtml<T>(this T obj)
         {
-
             if (obj != null)
             {
                 PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);

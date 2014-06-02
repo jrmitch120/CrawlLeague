@@ -16,11 +16,18 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Number of games played during the season")]
         public int GamesPlayed { get; set; }
 
+        [Description("When was the last game recorded")]
+        public DateTime LastGame { get; set; }
+
         [Created]
         public DateTime CreatedDate { get; set; }
 
         [Modified]
         public DateTime ModifiedDate { get; set; }
+
+        [ForeignKey(typeof(Division))]
+        [Description("Id of the division")]
+        public int DivisionId { get; set; }
     }
 
     public abstract class ParticipantCore
@@ -32,12 +39,5 @@ namespace CrawlLeague.ServiceModel.Types
         [ForeignKey(typeof(Season))]
         [Description("Id of the season")]
         public int SeasonId { get; set; }
-
-        [ForeignKey(typeof(Division))]
-        [Description("Id of the division")]
-        public int DivisionId { get; set; }
-
-        [Description("When was the last game recorded")]
-        public DateTime LastGame { get; set; }
     }
 }
