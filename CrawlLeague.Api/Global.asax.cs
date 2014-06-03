@@ -22,7 +22,7 @@ namespace CrawlLeague.Api
     public class AppHost : AppHostBase
     {
 
-        public AppHost() : base("REST Files", typeof(SeasonService).Assembly) { }
+        public AppHost() : base("Crawl League API", typeof(SeasonService).Assembly) { }
         
         public override void Configure(Container container)
         {
@@ -105,7 +105,7 @@ namespace CrawlLeague.Api
             if (Request.IsLocal)
                 Profiler.Start();
         }
-
+        
         protected void Application_EndRequest(object src, EventArgs e)
         {
             Profiler.Stop();

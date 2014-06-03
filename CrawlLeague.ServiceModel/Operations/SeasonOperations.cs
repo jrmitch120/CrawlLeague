@@ -2,6 +2,7 @@
 using System.Net;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
+using ServiceStack.DataAnnotations;
 
 namespace CrawlLeague.ServiceModel.Operations
 {
@@ -58,13 +59,18 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
     public class CreateSeason : SeasonCore, IReturn<SeasonResponse> { }
 
-    [Route("/seasons/{Id}/participants", "POST", Summary = @"CREATE a new crawler participant for a season",
+    [Route("/seasons/{SeasonId}/participants", "POST", Summary = @"CREATE a new crawler participant for a season",
         Notes = "This will create a crawler participant for a given season.  Subject to field validation.")]
     [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class CreateParticipant : ParticipantCore, IReturn<ParticipantResponse>
+    public class CreateParticipant : IReturn<ParticipantResponse>
     {
+        [ApiMember(Name = "SeasonId", Description = "Id of the season to join", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int SeasonId { get; set; }
+
+        [Description("Id of the crawler to join")]
+        public int CrawlerId { get; set; }
     }
 
     [Route("/seasons/{Id}", "PUT", Summary = @"UPDATE a specific season.",
