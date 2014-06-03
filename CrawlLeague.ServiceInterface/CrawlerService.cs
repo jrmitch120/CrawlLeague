@@ -60,7 +60,7 @@ namespace CrawlLeague.ServiceInterface
         public CrawlerResponse Get(FetchCrawler request)
         {
             var crawler = Db.SingleById<Crawler>(request.Id);
-
+            
             if (crawler == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
 
@@ -72,21 +72,19 @@ namespace CrawlLeague.ServiceInterface
             var crawler = new Crawler().PopulateWith(request.SanitizeDtoHtml());
 
             // Check for existing UserName
-            CrawlersResponse crawlersResp = Get(new FetchCrawlers { UserName = request.UserName });
-
-            if (crawlersResp.Crawlers.Any())
+            if (Get(new FetchCrawlers { UserName = request.UserName }).Crawlers.Any())
                 throw new HttpError(HttpStatusCode.Conflict,
                     new ArgumentException("UserName {0} already exists. ".Fmt(request.UserName)));
 
             // Check if division is open for joining
-            var divisionResp = TryResolve<DivisionService>().Get(new FetchDivision { Id = request.DivisionId });
+            var divisionResp = ResolveService<DivisionService>().Get(new FetchDivision { Id = request.DivisionId });
 
             if (!divisionResp.Division.Joinable)
                 throw new HttpError(HttpStatusCode.BadRequest, 
                     new ArgumentException("Division {0} is not joinable. ".Fmt(request.UserName)));
 
             // Validate .rc file for the server
-            var serverResp = TryResolve<ServerService>().Get(new FetchServer { Id = request.ServerId });
+            var serverResp = ResolveService<ServerService>().Get(new FetchServer { Id = request.ServerId });
 
             if (!_validator.ValidateRcInit(new Uri(serverResp.Server.RcUrl.Fmt("crawl-git", request.UserName))))
                 throw new HttpError(HttpStatusCode.Forbidden,

@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\GameProcessor.cs" />
+    <Compile Include="Game\GameEngine.cs" />
+    <Compile Include="Game\GameRunner.cs" />
     <Compile Include="Scrapping\ScrapperOptions.cs" />
     <Compile Include="Verification\CrawlerValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -48,6 +51,12 @@
     <Compile Include="Scrapping\ScraperResponse.cs" />
     <Compile Include="Scrapping\UriRequestRunner.cs" />
     <Compile Include="Scrapping\WebScraper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CrawlLeague.ServiceModel\CrawlLeague.ServiceModel.csproj">
+      <Project>{7f7ddc7e-4518-41a3-8f2b-7de575029b6b}</Project>
+      <Name>CrawlLeague.ServiceModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

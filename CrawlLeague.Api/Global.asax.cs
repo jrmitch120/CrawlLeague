@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
+using CrawlLeague.Core.Game;
 using CrawlLeague.Core.Scrapping;
 using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface;
@@ -53,7 +54,10 @@ namespace CrawlLeague.Api
 
             container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
             container.RegisterAutoWiredAs<WebScraper, IScraper>();
-            container.RegisterAutoWiredTypes(new[] {typeof (CrawlerValidator)});
+            container.RegisterAutoWiredTypes(new[]
+            {typeof (CrawlerValidator), typeof (GameRunner), typeof (GameProcessor)});
+
+            container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 
             //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
 

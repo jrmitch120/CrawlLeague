@@ -9,6 +9,7 @@ namespace CrawlLeague.ServiceModel.Types
         public virtual int Id { get; set; }
 
         [Description("Is the season currently active")]
+        [Ignore]
         public bool Active
         {
             get { return (DateTime.UtcNow > Start && DateTime.Now < End); }
