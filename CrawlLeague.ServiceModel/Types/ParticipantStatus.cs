@@ -17,6 +17,15 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Name of the division that the participant belongs to")]
         public string DivisionName { get; set; }
 
+        [Description("Id of the server that the participant plays on")]
+        public int ServerId { get; set; }
+
+        [Description("Name of the server that the participant plays on")]
+        public string ServerName { get; set; }
+
+        [Description("Abbreviation of the server that the participant plays on")]
+        public string ServerAbbreviation { get; set; }
+
         [Description("Name of the crawler")]
         public string UserName { get; set; }
 

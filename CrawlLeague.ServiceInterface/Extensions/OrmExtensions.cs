@@ -1,4 +1,5 @@
 ﻿using CrawlLeague.ServiceModel.Util;
+using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace CrawlLeague.ServiceInterface.Extensions
@@ -11,6 +12,13 @@ namespace CrawlLeague.ServiceInterface.Extensions
             expression.Rows = Paging.PageSize;
             
             return expression;
+        }
+
+        public static string ToPagedSql<TNewPoco, TBasePoco>(
+            this JoinSqlBuilder<TNewPoco, TBasePoco> builder, int page)
+        {
+            // Hackaroo.
+            return (builder.ToSql() + " LIMIT {0} OFFSET {1}").Fmt(Paging.PageSize, (page - 1) * Paging.PageSize);
         }
 
         public static bool Search(this string target, string search)

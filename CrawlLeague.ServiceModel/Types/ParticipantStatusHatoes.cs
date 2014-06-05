@@ -11,9 +11,12 @@ namespace CrawlLeague.ServiceModel.Types
 
         [Description("Name of the crawler")]
         public string UserName { get; set; }
-        
-        [Description("Name of the division that the participant belongs to")]
-        public string DivisionName { get; set; }
+
+        [Description("Name of the server that the participant plays on")]
+        public string ServerName { get; set; }
+
+        [Description("Abbreviation of the server that the participant plays on")]
+        public string ServerAbbreviation { get; set; }
 
         [Description("Curent total score for the season")]
         public int Score { get; set; }
@@ -27,7 +30,13 @@ namespace CrawlLeague.ServiceModel.Types
 
     public class ParticipantRefs
     {
-        [Description("Link to the season that the crawler is currently bound to")]
+        [Description("Link to the crawler")]
+        public string CrawlerRef { get; set; }
+
+        [Description("Link to the server that the crawler is playing on")]
+        public string ServerRef { get; set; }
+
+        [Description("Link to the season that the crawler is bound to")]
         public string SeasonRef { get; set; }
 
         [Description("Link to the division that the crawler is slotted into as of the last divison realignment")]

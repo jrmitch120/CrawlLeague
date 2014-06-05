@@ -66,7 +66,7 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("How many days a given round lasts before advancing")]
         public int DaysPerRound { get; set; }
 
-        [Description("Start of the season in (UTC)")]
+        [Description("Start of the season (UTC)")]
         public DateTime Start { get; set; }
 
         [Description("End of the season (UTC)")]

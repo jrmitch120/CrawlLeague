@@ -16,14 +16,14 @@ namespace CrawlLeague.ServiceInterface
             int page = request.Page ?? 1;
 
             // Expression visitor to build query dynamically
-            var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Season>();
+            var visitor = Db.From<Season>();
 
             if (request.InProgress )
                 visitor.Where(s => s.Start <= DateTime.UtcNow && s.End >= DateTime.UtcNow);
 
             visitor.OrderByDescending(s => s.Start);
 
-            var count = Convert.ToInt32(Db.Count(visitor));
+            var count = Db.Count(visitor);
 
             return new SeasonsResponse
             {

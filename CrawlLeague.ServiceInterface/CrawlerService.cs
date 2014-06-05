@@ -21,7 +21,7 @@ namespace CrawlLeague.ServiceInterface
             _validator = validator;
         }
 
-        private CrawlerHatoes Hatoes(Crawler crawler)
+        private CrawlerHatoes CrawlerHatoes(Crawler crawler)
         {
             var hatoes = new CrawlerHatoes().PopulateWith(crawler);
 
@@ -39,16 +39,16 @@ namespace CrawlLeague.ServiceInterface
             int page = request.Page ?? 1;
 
             // Expression visitor to build query dynamically
-            var visitor = OrmLiteConfig.DialectProvider.SqlExpression<Crawler>();
+            var visitor = Db.From<Crawler>();
 
             if (!request.UserName.IsNullOrEmpty()) // TODO Wildcard search
                 visitor.Where(c => c.UserName.ToUpper() == request.UserName.ToUpper());
-
-            var count = Convert.ToInt32(Db.Count(visitor));
+            
+            var count = Db.Count(visitor);
             var results = Db.Select(visitor.PageTo(page));
             var crawlers = new List<CrawlerHatoes>();
             
-            results.ForEach(r => crawlers.Add(Hatoes(r)));
+            results.ForEach(r => crawlers.Add(CrawlerHatoes(r)));
 
             return new CrawlersResponse
             {
@@ -64,7 +64,7 @@ namespace CrawlLeague.ServiceInterface
             if (crawler == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
 
-            return new CrawlerResponse { Crawler = Hatoes(crawler) };
+            return new CrawlerResponse { Crawler = CrawlerHatoes(crawler) };
         }
 
         public HttpResult Post(CreateCrawler request)
@@ -92,7 +92,7 @@ namespace CrawlLeague.ServiceInterface
 
             var newId = Db.Insert(crawler, selectIdentity: true);
 
-            return new HttpResult(new CrawlerResponse { Crawler = Hatoes(Db.SingleById<Crawler>(newId)) })
+            return new HttpResult(new CrawlerResponse { Crawler = CrawlerHatoes(Db.SingleById<Crawler>(newId)) })
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =

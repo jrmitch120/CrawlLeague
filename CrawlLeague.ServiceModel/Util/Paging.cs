@@ -20,10 +20,10 @@ namespace CrawlLeague.ServiceModel.Util
         public int Page { get; set; }
 
         [Description("Total number of pagable items")]
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; }
 
         [Description("Total pages")]
-        public int TotalPages { get { return (TotalCount + PageSize - 1) / PageSize; } }
+        public long TotalPages { get { return (TotalCount + PageSize - 1) / PageSize; } }
 
         [Description("Link to next page of items [if available]")]
         public string NextPage 

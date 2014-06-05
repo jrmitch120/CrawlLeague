@@ -18,7 +18,7 @@ namespace CrawlLeague.ServiceInterface
             return new ServersResponse
             {
                 Servers = Db.Select<Server>(q => q.PageTo(page)),
-                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Convert.ToInt32(Db.Count<Server>()) }
+                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Server>() }
             };
         }
 

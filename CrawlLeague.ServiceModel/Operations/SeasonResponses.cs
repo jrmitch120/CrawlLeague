@@ -42,16 +42,4 @@ namespace CrawlLeague.ServiceModel.Operations
             ResponseStatus = new ResponseStatus();
         }
     }
-
-    public class ParticipantResponse : IHasResponseStatus
-    {
-        public ParticipantStatusHatoes ParticipantStatus { get; set; }
-
-        public ResponseStatus ResponseStatus { get; set; }
-
-        public ParticipantResponse()
-        {
-            ResponseStatus = new ResponseStatus();
-        }
-    }
 }

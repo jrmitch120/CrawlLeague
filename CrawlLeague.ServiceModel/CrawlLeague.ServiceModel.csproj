@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operations\ParticipantOperations.cs" />
+    <Compile Include="Operations\ParticipantResponses.cs" />
     <Compile Include="Types\CrawlerHatoes.cs" />
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />

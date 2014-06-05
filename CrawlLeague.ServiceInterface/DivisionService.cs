@@ -18,7 +18,7 @@ namespace CrawlLeague.ServiceInterface
             return new DivisionsResponse
             {
                 Divisions = Db.Select<Division>(q => q.PageTo(page)),
-                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Convert.ToInt32(Db.Count<Division>()) }
+                Paging = new Paging(Request.AbsoluteUri) { Page = page, TotalCount = Db.Count<Division>() }
             };
         }
 

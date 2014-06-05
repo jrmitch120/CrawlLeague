@@ -19,6 +19,9 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("When was the last game recorded")]
         public DateTime LastGame { get; set; }
 
+        [Description("When was the last this participant was processed in a game sweep")]
+        public DateTime LastProcessed { get; set; }
+
         [Created]
         public DateTime CreatedDate { get; set; }
 

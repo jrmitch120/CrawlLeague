@@ -9,7 +9,7 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class FetchCrawlers : IReturn<CrawlersResponse>
     {
-        [ApiMember(Name = "UserName", Description = "UserName of crawler", ParameterType = "query", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "UserName", Description = "Filter by UserName of crawler", ParameterType = "query", DataType = "string", IsRequired = false)]
         public string UserName { get; set; }
         
         [ApiMember(Name = "Page", Description = "Current page", ParameterType = "query", DataType = "int", IsRequired = false)]
