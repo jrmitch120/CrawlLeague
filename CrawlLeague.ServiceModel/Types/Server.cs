@@ -33,5 +33,15 @@ namespace CrawlLeague.ServiceModel.Types
 
         [Modified]
         public DateTime ModifiedDate { get; set; }
+
+        public string PlayerRcUrl(string playerName)
+        {
+            return (PlayerRcUrl("git", playerName));
+        }
+
+        public string PlayerRcUrl(string version, string playerName)
+        {
+            return (String.Format(RcUrl, "crawl-" + version, playerName));
+        }
     }
 }

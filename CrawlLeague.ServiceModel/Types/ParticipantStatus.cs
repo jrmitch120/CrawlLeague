@@ -1,41 +1,42 @@
 ﻿using System;
-using ServiceStack.DataAnnotations;
 
 namespace CrawlLeague.ServiceModel.Types
 {
+    // Select DTO for complex join
     public class ParticipantStatus
     {
-        [Description("Id of the crawler")]
         public int CrawlerId { get; set; }
 
-        [Description("Id of the season")]
         public int SeasonId { get; set; }
 
-        [Description("Id of the division that the participant belongs to")]
         public int DivisionId { get; set; }
 
-        [Description("Name of the division that the participant belongs to")]
         public string DivisionName { get; set; }
 
-        [Description("Id of the server that the participant plays on")]
         public int ServerId { get; set; }
 
-        [Description("Name of the server that the participant plays on")]
         public string ServerName { get; set; }
 
-        [Description("Abbreviation of the server that the participant plays on")]
         public string ServerAbbreviation { get; set; }
 
-        [Description("Name of the crawler")]
         public string UserName { get; set; }
 
-        [Description("Curent total score for the season")]
         public int Score { get; set; }
 
-        [Description("Number of games played during the season")]
         public int GamesPlayed { get; set; }
 
-        [Description("When was the last game recorded for this participant")]
+        public int WinCount { get; set; }
+
+        public int TotalCharacaterLevels { get; set; }
+
+        public int BranchesVisited { get; set; }
+
+        public int LevelsVisited { get; set; }
+
+        public int RuneCount { get; set; }
+
+        public int TotalKills { get; set; }
+
         public DateTime LastGame { get; set; }
     }
 }

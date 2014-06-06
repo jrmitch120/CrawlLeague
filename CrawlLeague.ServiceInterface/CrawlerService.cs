@@ -86,7 +86,7 @@ namespace CrawlLeague.ServiceInterface
             // Validate .rc file for the server
             var serverResp = ResolveService<ServerService>().Get(new FetchServer { Id = request.ServerId });
 
-            if (!_validator.ValidateRcInit(new Uri(serverResp.Server.RcUrl.Fmt("crawl-git", request.UserName))))
+            if (!_validator.ValidateRcInit(new Uri(serverResp.Server.PlayerRcUrl(request.UserName))))
                 throw new HttpError(HttpStatusCode.Forbidden,
                     new ArgumentException("UserName {0} does not have a valid .rc file. ".Fmt(request.UserName)));
 

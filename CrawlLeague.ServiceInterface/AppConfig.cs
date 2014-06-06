@@ -7,12 +7,16 @@ namespace CrawlLeague.ServiceInterface
     {
         public AppConfig()
         {
+            ReadWriteApiKeys = new List<string>();
+            AdminApiKeys = new List<string>();
         }
 
         public AppConfig(IAppSettings resources)
         {
         }
-        
-        public IList<string> ReadWriteApiKeys { get; set; }
+
+        public List<string> ReadWriteApiKeys { get; private set; }
+
+        public List<string> AdminApiKeys { get; private set; }
     }
 }

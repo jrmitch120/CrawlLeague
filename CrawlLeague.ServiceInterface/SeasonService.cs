@@ -71,8 +71,6 @@ namespace CrawlLeague.ServiceInterface
             };
         }
 
-        
-
         public HttpResult Put(UpdateSeason request)
         {
             int result = Db.Update((Season)request.SanitizeDtoHtml());

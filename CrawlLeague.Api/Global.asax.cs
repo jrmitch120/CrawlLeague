@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using CrawlLeague.Core.Game;
@@ -33,16 +32,16 @@ namespace CrawlLeague.Api
             Plugins.Add(new ValidationFeature());
             Plugins.Add(new PostmanFeature());
 
-            var config = new AppConfig
-            {
-                ReadWriteApiKeys = new List<string> {ConfigurationManager.AppSettings["apiKey"]}
-            };
+            var config = new AppConfig();
+            
+            config.AdminApiKeys.AddRange(ConfigurationManager.AppSettings["adminApiKeys"].Split(new[] { ',' }));
+            config.ReadWriteApiKeys.AddRange(ConfigurationManager.AppSettings["apiKeys"].Split(new[] {','}));
+            
             container.Register(config);
 
             GlobalRequestFilters.Add((req, res, requestDto) =>
             {
-                if (!req.IsLocal && 
-                    requestDto.GetType() != typeof (CreateCrawler) &&
+                if (requestDto.GetType() != typeof (CreateCrawler) &&
                     req.Verb.ContainsAny(new[] {"DELETE", "PUT", "POST"}))
                 {
                     var keyValidator = new ApiKeyAttribute();

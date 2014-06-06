@@ -79,24 +79,28 @@ namespace CrawlLeague.ServiceInterface
             var fetchRequest = request as FetchParticipantStatus;
             var fetchAllReqeust = request as FetchParticipantStatuses;
 
-            var jn = new JoinSqlBuilder<Participant, Participant>();
-            jn.Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
+            var jn = new JoinSqlBuilder<Participant, Participant>()
+                .Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
                 .Join<Participant, Division>(p => p.DivisionId, d => d.Id)
                 .Join<Crawler, Server>(c => c.ServerId, d => d.Id)
-                .Select<Crawler>(c => new {c.UserName, c.ServerId})
-                .Select<Participant>(p => new {p.CrawlerId, p.LastGame, p.SeasonId, p.DivisionId})
-                .Select<Division>(d => new {DivisionName = d.Name})
-                .Select<Server>(s => new {ServerName = s.Name, ServerAbbreviation = s.Abbreviation})
-                .Where<Division>(d => d.Id == request.SeasonId);
-                
+                .Select<Crawler>(c => new { c.UserName, c.ServerId })
+                .Select<Participant>(p => new { p.CrawlerId, p.LastGame, p.SeasonId, p.DivisionId })
+                .Select<Division>(d => new { DivisionName = d.Name })
+                .Select<Server>(s => new { ServerName = s.Name, ServerAbbreviation = s.Abbreviation })
+                .Where<Participant>(s => s.SeasonId == request.SeasonId);
+
+            jn.OrderByDescending<Participant>(p => p.Score);
+
             // Restricted by Crawler
             if (fetchRequest != null)
                 jn.And<Participant>(p => p.CrawlerId == fetchRequest.CrawlerId);
 
-            jn.OrderByDescending<Participant>(p => p.Score);
-
+            // Standings
             if (fetchAllReqeust != null) // Hackaroo pageroo for JoinSqlBuilder.
+            {
+                jn.And<Division>(d => d.Id == fetchAllReqeust.DivisionId);
                 return (jn.ToPagedSql(fetchAllReqeust.Page ?? 1));
+            }
 
             return (jn.ToSql());
         }
@@ -137,8 +141,7 @@ namespace CrawlLeague.ServiceInterface
             var serverResp = ResolveService<ServerService>().Get(new FetchServer { Id = crawlerResp.Crawler.ServerId });
 
             if (!_validator.ValidateRcInit(
-                    new Uri(serverResp.Server.RcUrl.Fmt("crawl-{0}".Fmt(seasonResp.Season.CrawlVersion),
-                        crawlerResp.Crawler.UserName))))
+                    new Uri(serverResp.Server.PlayerRcUrl(seasonResp.Season.CrawlVersion, crawlerResp.Crawler.UserName))))
                 throw new HttpError(HttpStatusCode.Forbidden,
                     new ArgumentException(
                         "UserName {0} does not have a valid .rc file. ".Fmt(crawlerResp.Crawler.UserName)));
