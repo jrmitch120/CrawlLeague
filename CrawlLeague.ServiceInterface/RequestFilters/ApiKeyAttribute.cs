@@ -12,9 +12,8 @@ namespace CrawlLeague.ServiceInterface.RequestFilters
 
             var appConfig = req.TryResolve<AppConfig>();
             var apiKey = req.Headers["x-api-key"] ?? req.QueryString["api_key"];
-            
-            if (apiKey == null ||
-               (!appConfig.ReadWriteApiKeys.Contains(apiKey) && !appConfig.AdminApiKeys.Contains(apiKey)))
+
+            if (apiKey == null || !appConfig.ReadWriteApiKeys.Contains(apiKey))
             {
                 throw HttpError.Unauthorized("Unauthorized.  Valid x-api-key header required.");
             }
