@@ -73,7 +73,6 @@
     <Compile Include="ParticipantService.cs" />
     <Compile Include="RequestFilters\ApiKeyAttribute.cs" />
     <Compile Include="DivisionService.cs" />
-    <Compile Include="RequestFilters\AdminKeyAttribute.cs" />
     <Compile Include="ServerService.cs" />
     <Compile Include="CrawlerService.cs" />
     <Compile Include="SeasonService.cs" />

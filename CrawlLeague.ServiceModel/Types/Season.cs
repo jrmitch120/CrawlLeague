@@ -15,6 +15,9 @@ namespace CrawlLeague.ServiceModel.Types
             get { return (DateTime.UtcNow > Start && DateTime.Now < End); }
         }
 
+        [Description("Has the season been post processed")]
+        public bool Finalized { get; set; }
+
         [Description("When the season was created (UTC)")]
         public DateTime CreatedDate { get; set; }
 

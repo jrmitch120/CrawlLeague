@@ -18,8 +18,11 @@ namespace CrawlLeague.ServiceInterface
             // Expression visitor to build query dynamically
             var visitor = Db.From<Season>();
 
-            if (request.InProgress )
+            if (request.OnlyInProgress)
                 visitor.Where(s => s.Start <= DateTime.UtcNow && s.End >= DateTime.UtcNow);
+
+            if (request.NotFinal)
+                visitor.Where(s => !s.Finalized);
 
             visitor.OrderByDescending(s => s.Start);
 

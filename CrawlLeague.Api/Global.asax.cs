@@ -34,7 +34,6 @@ namespace CrawlLeague.Api
 
             var config = new AppConfig();
             
-            config.AdminApiKeys.AddRange(ConfigurationManager.AppSettings["adminApiKeys"].Split(new[] { ',' }));
             config.ReadWriteApiKeys.AddRange(ConfigurationManager.AppSettings["apiKeys"].Split(new[] {','}));
             
             container.Register(config);
@@ -72,11 +71,11 @@ namespace CrawlLeague.Api
             
             using (var db = container.Resolve<IDbConnectionFactory>().Open())
             {
+                db.CreateTableIfNotExists<Participant>();
                 db.CreateTableIfNotExists<Season>();
+                db.CreateTableIfNotExists<Division>();
                 db.CreateTableIfNotExists<Server>();
                 db.CreateTableIfNotExists<Crawler>();
-                db.CreateTableIfNotExists<Division>();
-                db.CreateTableIfNotExists<Participant>();
             }
 
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>

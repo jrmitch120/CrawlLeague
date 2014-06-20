@@ -10,8 +10,11 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     public class FetchSeasons : IReturn<SeasonsResponse>
     {
-        [ApiMember(Name = "InProgress", Description = "Filter by seasons that are currently in progress", ParameterType = "query", DataType = "boolean", IsRequired = false)]
-        public bool InProgress { get; set; }
+        [ApiMember(Name = "OnlyInProgress", Description = "Filter by seasons that are currently in progress", ParameterType = "query", DataType = "boolean", IsRequired = false)]
+        public bool OnlyInProgress { get; set; }
+
+        [ApiMember(Name = "NotFinal", Description = "Filter by seasons that are not finalized", ParameterType = "query", DataType = "boolean", IsRequired = false)]
+        public bool NotFinal { get; set; }
 
         [ApiMember(Name = "Page", Description = "Current page", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int? Page { get; set; }
