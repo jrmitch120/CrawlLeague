@@ -37,7 +37,7 @@ namespace CrawlLeague.ServiceInterface
             
             var newId = Db.Insert((Server)request.SanitizeDtoHtml(), selectIdentity: true);
 
-            return new HttpResult(new ServerResponse { Server = Db.SingleById<Server>(newId) })
+            return new HttpResult(new ServerResponse {Server = Get(new FetchServer {Id = (int) newId}).Server})
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =

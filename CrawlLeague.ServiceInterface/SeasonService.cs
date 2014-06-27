@@ -64,7 +64,7 @@ namespace CrawlLeague.ServiceInterface
             var season = new Season().PopulateWith(request.SanitizeDtoHtml());
             var newId = Db.Insert(season, selectIdentity: true);
 
-            return new HttpResult(new SeasonResponse { Season = Db.SingleById<Season>(newId) })
+            return new HttpResult(new SeasonResponse {Season = Get(new FetchSeason {Id = (int) newId}).Season})
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =

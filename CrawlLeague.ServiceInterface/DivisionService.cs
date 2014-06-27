@@ -38,7 +38,7 @@ namespace CrawlLeague.ServiceInterface
 
             var newId = Db.Insert(division, selectIdentity: true);
 
-            return new HttpResult(new DivisionResponse { Division = Db.SingleById<Division>(newId) })
+            return new HttpResult(new DivisionResponse {Division = Get(new FetchDivision {Id = (int) newId}).Division})
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =

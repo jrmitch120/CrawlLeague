@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using System.Web;
 using CrawlLeague.Core.Game;
 using CrawlLeague.Core.Scrapping;
@@ -48,7 +49,10 @@ namespace CrawlLeague.Api
                 }
             });
 
-            SetConfig(new HostConfig {DefaultRedirectPath = "/swagger-ui/"});
+            SetConfig(new HostConfig
+            {
+                DefaultRedirectPath = "/swagger-ui/"
+            });
 
             container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
             container.RegisterAutoWiredAs<WebScraper, IScraper>();

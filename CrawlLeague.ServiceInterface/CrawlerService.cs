@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using CrawlLeague.Core.Verification;
@@ -21,19 +20,6 @@ namespace CrawlLeague.ServiceInterface
             _validator = validator;
         }
 
-        private CrawlerHatoes CrawlerHatoes(Crawler crawler)
-        {
-            var hatoes = new CrawlerHatoes().PopulateWith(crawler);
-
-            hatoes.References.DivisionRef =
-                Request.GetBaseUrl().CombineWith(new FetchDivision {Id = crawler.DivisionId}.ToGetUrl());
-
-            hatoes.References.ServerRef =
-                Request.GetBaseUrl().CombineWith(new FetchServer {Id = crawler.ServerId}.ToGetUrl());
-
-            return (hatoes);
-        }
-
         public CrawlersResponse Get(FetchCrawlers request)
         {
             int page = request.Page ?? 1;
@@ -45,11 +31,10 @@ namespace CrawlLeague.ServiceInterface
                 visitor.Where(c => c.UserName.ToUpper() == request.UserName.ToUpper());
             
             var count = Db.Count(visitor);
-            var results = Db.Select(visitor.PageTo(page));
-            var crawlers = new List<CrawlerHatoes>();
             
-            results.ForEach(r => crawlers.Add(CrawlerHatoes(r)));
-
+            var crawlers = Db.Select(visitor.PageTo(page));
+            crawlers.ForEach(c => c.MapReferences(Request));
+            
             return new CrawlersResponse
             {
                 Crawlers = crawlers,
@@ -60,11 +45,13 @@ namespace CrawlLeague.ServiceInterface
         public CrawlerResponse Get(FetchCrawler request)
         {
             var crawler = Db.SingleById<Crawler>(request.Id);
-            
+
+            crawler.MapReferences(Request);
+
             if (crawler == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Crawler {0} does not exist. ".Fmt(request.Id)));
 
-            return new CrawlerResponse { Crawler = CrawlerHatoes(crawler) };
+            return new CrawlerResponse { Crawler = crawler };
         }
 
         public HttpResult Post(CreateCrawler request)
@@ -92,7 +79,7 @@ namespace CrawlLeague.ServiceInterface
 
             var newId = Db.Insert(crawler, selectIdentity: true);
 
-            return new HttpResult(new CrawlerResponse { Crawler = CrawlerHatoes(Db.SingleById<Crawler>(newId)) })
+            return new HttpResult(new CrawlerResponse {Crawler = Get(new FetchCrawler {Id = (int) newId}).Crawler})
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =

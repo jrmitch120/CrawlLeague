@@ -7,7 +7,7 @@ namespace CrawlLeague.ServiceModel.Operations
 {
     public class CrawlersResponse : IHasResponseStatus
     {
-        public List<CrawlerHatoes> Crawlers { get; set; }
+        public List<Crawler> Crawlers { get; set; }
         public Paging Paging { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
 
@@ -19,7 +19,7 @@ namespace CrawlLeague.ServiceModel.Operations
 
     public class CrawlerResponse : IHasResponseStatus
     {
-        public CrawlerHatoes Crawler { get; set; }
+        public Crawler Crawler { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
 

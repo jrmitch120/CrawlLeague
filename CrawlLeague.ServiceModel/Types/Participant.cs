@@ -49,8 +49,13 @@ namespace CrawlLeague.ServiceModel.Types
         [ForeignKey(typeof(Division))]
         [Description("Id of the division")]
         public int DivisionId { get; set; }
+
+        [Description("References to peripheral resources")]
+        [Ignore]
+        public ParticipantRefs References { get; set; }
     }
 
+    [Alias("Participant")]
     public abstract class ParticipantCore
     {
         [ForeignKey(typeof(Crawler))]

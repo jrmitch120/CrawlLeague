@@ -38,5 +38,9 @@ namespace CrawlLeague.ServiceModel.Types
 
         [Description("Reason for a banning")]
         public string BanReason { get; set; }
+
+        [Description("References to peripheral resources")]
+        [Ignore]
+        public CrawlerRefs References { get; set; }
     }
 }

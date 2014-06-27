@@ -19,40 +19,30 @@ namespace CrawlLeague.ServiceInterface
         {
             _validator = validator;
         }
-                
-        private ParticipantStatusHatoes ParitcipantStatusHatoes(ParticipantStatus participant)
+
+        private ParticipantStatus GenerateParticipantStatus(ParticipantStatusJoin queryResult)
         {
-            var hatoes = new ParticipantStatusHatoes().PopulateWith(participant);
+            var participantStatus = new ParticipantStatus().PopulateWith(queryResult);
 
-            hatoes.References.CrawlerRef =
-                Request.GetBaseUrl().CombineWith(new FetchCrawler { Id = participant.CrawlerId }.ToGetUrl());
+            participantStatus.References = new ParticipantRefs
+            {
+                CrawlerRef = Request.GetBaseUrl().CombineWith(new FetchCrawler { Id = queryResult.CrawlerId }.ToGetUrl()),
+                DivisionRef = Request.GetBaseUrl().CombineWith(new FetchDivision { Id = queryResult.DivisionId }.ToGetUrl()),
+                SeasonRef = Request.GetBaseUrl().CombineWith(new FetchSeason { Id = queryResult.SeasonId }.ToGetUrl()),
+                ServerRef = Request.GetBaseUrl().CombineWith(new FetchServer { Id = queryResult.ServerId }.ToGetUrl())
+            };
 
-            hatoes.References.DivisionRef =
-                Request.GetBaseUrl().CombineWith(new FetchDivision { Id = participant.DivisionId }.ToGetUrl());
-
-            hatoes.References.SeasonRef =
-                Request.GetBaseUrl().CombineWith(new FetchSeason { Id = participant.SeasonId }.ToGetUrl());
-
-            hatoes.References.ServerRef =
-                Request.GetBaseUrl().CombineWith(new FetchServer { Id = participant.ServerId }.ToGetUrl());
-
-            return (hatoes);
+            return participantStatus;
         }
 
         public ParticipantsResponse Get(FetchParticipantStatuses request)
         {
-            var participants = new List<ParticipantStatusHatoes>();
-            
-            // Count
-            var jn = new JoinSqlBuilder<Crawler, Participant>();
-            jn.Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
-                .Join<Participant, Division>(p => p.DivisionId, d => d.Id)
-                .Join<Crawler, Server>(c => c.ServerId, d => d.Id).SelectCount<Participant>(p => p.Id);
+            var participants = new List<ParticipantStatus>();
 
-            var count = Db.Scalar<long>(jn.ToSql());   
-            var results = Db.Select<ParticipantStatus>(GenerateFetchParticipantSql(request));
+            var count = Db.Count<Participant>(p => p.SeasonId == request.SeasonId && p.DivisionId == request.DivisionId);
+            var results = Db.Select<ParticipantStatusJoin>(GenerateFetchParticipantSql(request));
 
-            results.ForEach(r => participants.Add(ParitcipantStatusHatoes(r)));
+            results.ForEach(r => participants.Add(GenerateParticipantStatus(r)));
 
             return new ParticipantsResponse
             {
@@ -63,14 +53,14 @@ namespace CrawlLeague.ServiceInterface
 
         public ParticipantResponse Get(FetchParticipantStatus request)
         {
-            var result = Db.Single<ParticipantStatus>(GenerateFetchParticipantSql(request));
+            var result = Db.Single<ParticipantStatusJoin>(GenerateFetchParticipantSql(request));
 
             if (result == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("No match was found."));
 
             return new ParticipantResponse
             {
-                ParticipantStatus = ParitcipantStatusHatoes(result)
+                ParticipantStatus = GenerateParticipantStatus(result)
             };
         }
 
@@ -88,7 +78,7 @@ namespace CrawlLeague.ServiceInterface
                 .Select<Division>(d => new { DivisionName = d.Name })
                 .Select<Server>(s => new { ServerName = s.Name, ServerAbbreviation = s.Abbreviation })
                 .Where<Participant>(s => s.SeasonId == request.SeasonId);
-
+            
             jn.OrderByDescending<Participant>(p => p.Score);
 
             // Restricted by Crawler

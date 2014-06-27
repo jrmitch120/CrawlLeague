@@ -53,11 +53,12 @@
     <Compile Include="Operations\ParticipantOperations.cs" />
     <Compile Include="Operations\ParticipantResponses.cs" />
     <Compile Include="Operations\AdminOperations.cs" />
-    <Compile Include="Types\CrawlerHatoes.cs" />
+    <Compile Include="Types\CrawlerRefs.cs" />
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />
+    <Compile Include="Types\ParticipantRefs.cs" />
+    <Compile Include="Types\ParticipantStatusJoin.cs" />
     <Compile Include="Types\ParticipantStatus.cs" />
-    <Compile Include="Types\ParticipantStatusHatoes.cs" />
     <Compile Include="Types\ProcessRequest.cs" />
     <Compile Include="Types\RoundInformation.cs" />
     <Compile Include="Types\SeasonStatus.cs" />
