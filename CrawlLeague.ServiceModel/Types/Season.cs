@@ -24,34 +24,39 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Last time the season was modified (UTC)")]
         public DateTime ModifiedDate { get; set; }
 
-        public RoundInformation RoundInformation()
+        [Ignore]
+        [Description("Information for the season's rounds")]
+        public RoundInformation RoundInformation
         {
-            var round = new RoundInformation { TotalRounds = (End - Start).Days / DaysPerRound };
-
-            if ((End - Start).Days % DaysPerRound != 0)
-                round.TotalRounds++;
-
-            if (DateTime.UtcNow < Start)
+            get
             {
-                round.CurrentRound = 1;
-                round.RoundBegins = Start;
-                round.RoundEnds = Start.AddDays(DaysPerRound);
+                var round = new RoundInformation {TotalRounds = (End - Start).Days/DaysPerRound};
+
+                if ((End - Start).Days%DaysPerRound != 0)
+                    round.TotalRounds++;
+
+                if (DateTime.UtcNow < Start)
+                {
+                    round.CurrentRound = 1;
+                    round.RoundBegins = Start;
+                    round.RoundEnds = Start.AddDays(DaysPerRound);
+                }
+                if (DateTime.UtcNow > End)
+                {
+                    round.CurrentRound = round.TotalRounds;
+                    round.RoundBegins = End.AddDays(DaysPerRound*-1);
+                    round.RoundEnds = End;
+                }
+
+                round.CurrentRound = (DateTime.UtcNow - Start).Days/DaysPerRound + 1;
+                round.RoundBegins = Start.AddDays((round.CurrentRound - 1)*DaysPerRound);
+
+                round.RoundEnds = round.RoundBegins.AddDays(DaysPerRound) > End
+                    ? End
+                    : round.RoundBegins.AddDays(DaysPerRound);
+
+                return (round);
             }
-            if (DateTime.UtcNow > End)
-            {
-                round.CurrentRound = round.TotalRounds;
-                round.RoundBegins = End.AddDays(DaysPerRound * -1);
-                round.RoundEnds = End;
-            }
-
-            round.CurrentRound = (DateTime.UtcNow - Start).Days / DaysPerRound + 1;
-            round.RoundBegins = Start.AddDays((round.CurrentRound - 1) * DaysPerRound);
-
-            round.RoundEnds = round.RoundBegins.AddDays(DaysPerRound) > End
-                ? End
-                : round.RoundBegins.AddDays(DaysPerRound);
-
-            return (round);
         }
     }
 

@@ -42,7 +42,7 @@ namespace CrawlLeague.ServiceInterface
                 StatusCode = HttpStatusCode.Created,
                 Headers =
                 {
-                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(request.Id)}
+                    {HttpHeaders.Location, Request.AbsoluteUri.CombineWith(newId)}
                 }
             };
         }

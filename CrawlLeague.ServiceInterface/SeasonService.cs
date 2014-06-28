@@ -45,20 +45,6 @@ namespace CrawlLeague.ServiceInterface
             return new SeasonResponse{Season = season};
         }
 
-        public SeasonStatusResponse Get(FetchSeasonStatus request)
-        {
-            var season = Db.SingleById<Season>(request.Id);
-
-            if (season == null)
-                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("Season {0} does not exist. ".Fmt(request.Id)));
-
-            return new SeasonStatusResponse
-            {
-                Season = season,
-                Status = new SeasonStatus {RoundInformation = season.RoundInformation()}
-            };
-        }
-
         public HttpResult Post(CreateSeason request)
         {
             var season = new Season().PopulateWith(request.SanitizeDtoHtml());

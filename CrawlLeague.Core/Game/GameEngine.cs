@@ -16,11 +16,14 @@ namespace CrawlLeague.Core.Game
             _processor = processor;
         }
 
-        public void Run(IEnumerable<Crawler> crawlers, Season season)
+        public void Run(IEnumerable<Participant> participants, Season season)
         {
             Running = true;
 
-            // Todo
+            foreach (Participant participant in participants)
+            {
+                //season.RoundInformation
+            }
 
             Running = false;
         }

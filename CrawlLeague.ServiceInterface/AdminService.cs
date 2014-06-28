@@ -18,7 +18,7 @@ namespace CrawlLeague.ServiceInterface
             foreach (Season season in seasonResp.Seasons)
             {
                 var processDate = season.Active
-                    ? season.RoundInformation().RoundBegins
+                    ? season.RoundInformation.RoundBegins
                     : season.End.AddDays(season.DaysPerRound*-1);
 
                 var jn = new JoinSqlBuilder<Participant, Participant>()

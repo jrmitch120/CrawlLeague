@@ -33,8 +33,6 @@ namespace CrawlLeague.ServiceModel.Operations
     {
         public Season Season { get; set; }
 
-        public SeasonStatus Status { get; set; }
-
         public ResponseStatus ResponseStatus { get; set; }
 
         public SeasonStatusResponse()

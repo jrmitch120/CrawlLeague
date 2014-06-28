@@ -30,16 +30,6 @@ namespace CrawlLeague.ServiceModel.Operations
         public int Id { get; set; }
     }
 
-    [Route("/seasons/{Id}/status", "GET", Summary = @"GET a specific season's status.",
-        Notes = "This will return a season's status.")]
-    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
-    [ApiResponse(HttpStatusCode.NotFound, "Season was not found.")]
-    public class FetchSeasonStatus : IReturn<SeasonStatusResponse>
-    {
-        [ApiMember(Name = "Id", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
-        public int Id { get; set; }
-    }
-
     [Route("/seasons", "POST", Summary = @"CREATE a new season",
         Notes = "This will create a new season.  Subject to field validation.")]
     [ApiResponse(422, "Validation error.")]
