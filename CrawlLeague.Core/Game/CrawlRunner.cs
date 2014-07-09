@@ -2,11 +2,11 @@
 
 namespace CrawlLeague.Core.Game
 {
-    public class GameRunner
+    public class CrawlRunner
     {
         private readonly IScraper _scraper;
 
-        public GameRunner(IScraper scraper)
+        public CrawlRunner(IScraper scraper)
         {
             _scraper = scraper;
         }

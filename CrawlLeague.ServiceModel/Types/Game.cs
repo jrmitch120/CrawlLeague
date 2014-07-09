@@ -7,21 +7,20 @@ namespace CrawlLeague.ServiceModel.Types
     public class Game : IAudit
     {
         [AutoIncrement]
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
 
-        [ForeignKey(typeof(Crawler))]
-        [Description("Id of the crawler")]
-        public int CrawlerId { get; set; }
-
-        [ForeignKey(typeof(Season))]
-        [Description("Id of the season to join")]
-        public int SeasonId { get; set; }
+        [ForeignKey(typeof(Participant))]
+        [Description("Id of the participant")]
+        public int ParticipantId { get; set; }
 
         [Description("Full morgue file")]
         public string Morgue { get; set; }
 
         [Description("Crawl league calculated score")]
         public int Score { get; set; }
+
+        [Description("When the game was completed (UTC)")]
+        public DateTime CompletedDate { get; set; }
 
         [Created]
         public DateTime CreatedDate { get; set; }

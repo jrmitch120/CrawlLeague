@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrawlLeague.Core.Game
 {
-    public class GameProcessor
+    public class CrawlProcessor
     {
         
     }

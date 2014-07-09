@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CrawlLeague.ServiceInterface.RequestFilters;
+﻿using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
@@ -12,44 +11,68 @@ namespace CrawlLeague.ServiceInterface
     {
         public ProcessRequestsResponse Get(FetchProcessRequests request)
         {
-            var processingRequests = new List<ProcessingRequest>();
-            var seasonResp = ResolveService<SeasonService>().Get(new FetchSeasons {NotFinal = true});
+            var processingRequest = new ProcessingRequest();
+
+            var seasonResp = ResolveService<SeasonService>().Get(new FetchSeasons { NotFinal = true });
 
             foreach (Season season in seasonResp.Seasons)
             {
-                var processDate = season.Active
-                    ? season.RoundInformation.RoundBegins
-                    : season.End.AddDays(season.DaysPerRound*-1);
+                var seasonRequest = new SeasonProcessRequest {SeasonId = season.Id};
 
-                var jn = new JoinSqlBuilder<Participant, Participant>()
-                .Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
-                .Join<Server, Crawler>(s => s.Id, c => c.ServerId)
-                .SelectAll<Participant>()
-                .Select<Server>(s => new { s.MorgueUrl})
-                .Select<Crawler>(c => new { c.UserName })
-                .Where<Participant>(p => p.LastGame < processDate);
-
-                var results = Db.Select<TestMe>(jn.ToSql());
-
-                results.ForEach(r =>
+                foreach (var round in season.RoundInformation.RoundsToProcess.Values)
                 {
-                    var processRequest = new ProcessingRequest
-                    {
-                        Participant = new Participant().PopulateWith(r),
-                        MorgueUrl = new Server {MorgueUrl = r.MorgueUrl}.PlayerMorgueUrl(r.UserName)
-                    };
+                    var roundRequest = new RoundProcessRequest {Round = round};
 
-                    processingRequests.Add(processRequest);
-                });
+                    var finishedCrawlers =
+                        Db.SqlColumn<int>(new JoinSqlBuilder<Game, Game>()
+                            .Join<Participant, Game>(p => p.Id, g => g.ParticipantId)
+                            .Select<Participant>(p => p.CrawlerId)
+                            .Where<Game>(
+                                x =>
+                                    x.CompletedDate >= round.Start &&
+                                    x.CompletedDate <= round.End)
+                            .And<Participant>(p => p.SeasonId == season.Id).ToSql());
+
+                    var gamesNeeded = Db.Select<TestMe>(new JoinSqlBuilder<Participant, Participant>()
+                        .Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
+                        .Join<Participant, Season>(p => p.SeasonId, s => s.Id)
+                        .Join<Server, Crawler>(s => s.Id, c => c.ServerId)
+                        .Select<Participant>(p => new {ParticipantId = p.Id, p.CrawlerId})
+                        .Select<Server>(s => new {s.MorgueUrl})
+                        .Select<Crawler>(c => new {c.UserName})
+                        .Select<Season>(s => new {s.CrawlVersion})
+                        .Where<Participant>(p => p.SeasonId == season.Id) // Specific season
+                        .And<Participant>(p => !Sql.In(p.CrawlerId, finishedCrawlers)) // Not played a game
+                        .And<Crawler>(c => !c.Banned).ToSql());
+
+                    gamesNeeded.ForEach(r => roundRequest.GameFetchRequests.Add(new GameFetchRequest
+                    {
+                        CrawlerId = r.CrawlerId,
+                        ParticipantId = r.ParticipantId,
+                        MorgueUrl = new Server {MorgueUrl = r.MorgueUrl}.PlayerMorgueUrl(r.CrawlVersion, r.UserName),
+                    }));
+
+                    seasonRequest.RoundProcessRequests.Add(roundRequest);
+                }
+
+                processingRequest.SeasonProcessRequests.Add(seasonRequest);
             }
 
-            return new ProcessRequestsResponse { ProcessRequests = processingRequests };
+            return new ProcessRequestsResponse {ProcessRequest = processingRequest};
         }
 
-        public class TestMe : Participant
+        public class TestMe
         {
-            public string MorgueUrl { get; set; }
             public string UserName { get; set; }
+            public int CrawlerId { get; set; }
+            public string CrawlVersion { get; set; }
+            public string ParticipantId { get; set; }
+            public string MorgueUrl { get; set; }
+        }
+
+        public class TestMe2
+        {
+            public int CrawlerId { get; set; }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CrawlLeague.ServiceModel.Operations
 {
     public class ProcessRequestsResponse : IHasResponseStatus
     {
-        public List<ProcessingRequest> ProcessRequests { get; set; }
+        public ProcessingRequest ProcessRequest { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
 
         public ProcessRequestsResponse()

@@ -1,31 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using CrawlLeague.ServiceModel.Types;
 
 namespace CrawlLeague.Core.Game
 {
     public class GameEngine
     {
-        private readonly GameRunner _runner;
-        private readonly GameProcessor _processor;
+        private readonly CrawlRunner _runner;
+        private readonly CrawlProcessor _processor;
 
-        public bool Running { get; private set; }
+        private volatile bool _running;
+        private Timer _timer;
+        private readonly TimeSpan _runInterval = TimeSpan.FromMinutes(1);
 
-        public GameEngine(GameRunner runner, GameProcessor processor)
+        public GameEngine(CrawlRunner runner, CrawlProcessor processor)
         {
             _runner = runner;
             _processor = processor;
         }
 
-        public void Run(IEnumerable<Participant> participants, Season season)
+        public void Start()
         {
-            Running = true;
+            _timer = new Timer(_ => Run(), null, TimeSpan.Zero, _runInterval);
+        }
 
-            foreach (Participant participant in participants)
+        private void Run()
+        {
+            if (_running)
+                return;
+
+            try
             {
-                //season.RoundInformation
+                Thread.Sleep(10000);
             }
-
-            Running = false;
+            // TODO: catch (Exception ex) { }
+            finally
+            {
+                _running = false;    
+            }
+            
         }
     }
 }

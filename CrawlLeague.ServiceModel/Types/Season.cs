@@ -24,38 +24,59 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Last time the season was modified (UTC)")]
         public DateTime ModifiedDate { get; set; }
 
+        [Description("Last time the season was processed for new player data (UTC)")]
+        public DateTime LastProcessed { get; set; }
+
         [Ignore]
         [Description("Information for the season's rounds")]
         public RoundInformation RoundInformation
         {
             get
             {
-                var round = new RoundInformation {TotalRounds = (End - Start).Days/DaysPerRound};
+                var info = new RoundInformation {TotalRounds = (End - Start).Days/DaysPerRound};
 
                 if ((End - Start).Days%DaysPerRound != 0)
-                    round.TotalRounds++;
+                    info.TotalRounds++;
 
                 if (DateTime.UtcNow < Start)
                 {
-                    round.CurrentRound = 1;
-                    round.RoundBegins = Start;
-                    round.RoundEnds = Start.AddDays(DaysPerRound);
+                    info.CurrentRound.Number = 1;
+                    info.CurrentRound.Start = Start;
+                    info.CurrentRound.End = Start.AddDays(DaysPerRound);
                 }
                 if (DateTime.UtcNow > End)
                 {
-                    round.CurrentRound = round.TotalRounds;
-                    round.RoundBegins = End.AddDays(DaysPerRound*-1);
-                    round.RoundEnds = End;
+                    info.CurrentRound.Number = info.TotalRounds;
+                    info.CurrentRound.Start = End.AddDays(DaysPerRound * -1);
+                    info.CurrentRound.End = End;
                 }
 
-                round.CurrentRound = (DateTime.UtcNow - Start).Days/DaysPerRound + 1;
-                round.RoundBegins = Start.AddDays((round.CurrentRound - 1)*DaysPerRound);
+                info.CurrentRound.Number = (DateTime.UtcNow - Start).Days/DaysPerRound + 1;
+                info.CurrentRound.Start = Start.AddDays((info.CurrentRound.Number - 1) * DaysPerRound);
 
-                round.RoundEnds = round.RoundBegins.AddDays(DaysPerRound) > End
+                info.CurrentRound.End = info.CurrentRound.Start.AddDays(DaysPerRound) > End
                     ? End
-                    : round.RoundBegins.AddDays(DaysPerRound);
+                    : info.CurrentRound.Start.AddDays(DaysPerRound);
 
-                return (round);
+                
+                for (int i = 0; i < info.CurrentRound.Number ; i++)
+                {
+                    var roundsBack = i * -1;
+
+                    var processRound = new Round
+                    {
+                        Start = info.CurrentRound.Start.AddDays(roundsBack * DaysPerRound),
+                        End = info.CurrentRound.End.AddDays(roundsBack * DaysPerRound),
+                        Number = info.CurrentRound.Number + (roundsBack)
+                    };
+
+                    if (LastProcessed < processRound.End)
+                        info.RoundsToProcess.Add(processRound.Number, processRound);
+                    else
+                        break;
+                }
+
+                return (info);
             }
         }
     }

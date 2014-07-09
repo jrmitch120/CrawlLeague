@@ -34,9 +34,9 @@ namespace CrawlLeague.ServiceModel.Types
         [Modified]
         public DateTime ModifiedDate { get; set; }
 
-        public string PlayerMorgueUrl(string playerName)
+        public string PlayerMorgueUrl(string crawlVersion,string playerName)
         {
-            return String.Format(MorgueUrl, playerName);
+            return FormatUrl(MorgueUrl, crawlVersion, playerName);
         }
 
         public string PlayerRcUrl(string playerName)
@@ -44,9 +44,20 @@ namespace CrawlLeague.ServiceModel.Types
             return (PlayerRcUrl("git", playerName));
         }
 
-        public string PlayerRcUrl(string version, string playerName)
+        public string PlayerRcUrl(string crawlVersion, string playerName)
         {
-            return (String.Format(RcUrl, "crawl-" + version, playerName));
+            return FormatUrl(RcUrl, crawlVersion, playerName);
+        }
+
+        private string FormatUrl(string url, string crawlVersion = null, string playerName = null)
+        {
+            if (crawlVersion != null)
+                url = url.Replace("{crawlVersion}", crawlVersion);
+
+            if (playerName != null)
+                url = url.Replace("{userName}", playerName);
+
+            return url;
         }
     }
 }

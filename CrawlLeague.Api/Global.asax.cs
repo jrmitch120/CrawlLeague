@@ -57,11 +57,9 @@ namespace CrawlLeague.Api
             container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
             container.RegisterAutoWiredAs<WebScraper, IScraper>();
             container.RegisterAutoWiredTypes(new[]
-            {typeof (CrawlerValidator), typeof (GameRunner), typeof (GameProcessor)});
+            {typeof (CrawlerValidator), typeof (CrawlRunner), typeof (CrawlProcessor), typeof (GameEngine)});
 
-            container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
-
-            //container.Register<IDbConnectionFactory>(new OrmLiteConnectionFactory(":memory:", SqliteDialect.Provider));
+            //container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 
             container.Register<IDbConnectionFactory>(
                 new OrmLiteConnectionFactory(HttpContext.Current.Server.MapPath("~/App_Data/leaguedata.sqlite"),
@@ -75,11 +73,12 @@ namespace CrawlLeague.Api
             
             using (var db = container.Resolve<IDbConnectionFactory>().Open())
             {
-                db.CreateTableIfNotExists<Participant>();
                 db.CreateTableIfNotExists<Season>();
                 db.CreateTableIfNotExists<Division>();
                 db.CreateTableIfNotExists<Server>();
                 db.CreateTableIfNotExists<Crawler>();
+                db.CreateTableIfNotExists<Participant>();
+                db.CreateTableIfNotExists<Game>();
             }
 
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>
@@ -95,6 +94,8 @@ namespace CrawlLeague.Api
                 if (auditRow != null)
                     auditRow.ModifiedDate = DateTime.UtcNow;
             };
+
+            container.Resolve<GameEngine>().Start();
         }
     }
 

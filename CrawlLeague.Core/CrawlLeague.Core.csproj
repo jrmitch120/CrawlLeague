@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\GameProcessor.cs" />
+    <Compile Include="Game\CrawlProcessor.cs" />
     <Compile Include="Game\GameEngine.cs" />
-    <Compile Include="Game\GameRunner.cs" />
+    <Compile Include="Game\CrawlRunner.cs" />
     <Compile Include="Scrapping\ScrapperOptions.cs" />
     <Compile Include="Verification\CrawlerValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
