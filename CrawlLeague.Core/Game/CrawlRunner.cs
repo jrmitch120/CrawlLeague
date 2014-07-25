@@ -51,7 +51,7 @@ namespace CrawlLeague.Core.Game
             IDictionary<GameFetchRequest, ScraperResponse> morgueResponses)
         {
             // 1: url (relative), 2:filename, 3: timestamp, 4: size
-            //<tr>[\s]*<td[^>]*>.*?</td>[\s]*<td[^>]*><a href="([^.]*.txt)">*([^<]*)</a></td>[\s]*<td[^>]*>(.*?)</td>[\s]*<td[^>]*>(.*?)</td></tr>
+            //<tr>[\s]*<td[^>]*>.*?</td>[\s]*<td[^>]*><a href="([^.]*.txt)">*([^<]*)</a></td>[\s]*<td[^>]*>(.*?)</td>[\s]*<td[^>]*>(.*?)</td>
 
             return null; // TODO
         }

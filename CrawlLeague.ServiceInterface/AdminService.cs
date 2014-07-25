@@ -66,8 +66,8 @@ namespace CrawlLeague.ServiceInterface
         {
             public string UserName { get; set; }
             public int CrawlerId { get; set; }
+            public int ParticipantId { get; set; }
             public string CrawlVersion { get; set; }
-            public string ParticipantId { get; set; }
             public string MorgueUrl { get; set; }
             public int UtcOffset { get; set; }
         }
