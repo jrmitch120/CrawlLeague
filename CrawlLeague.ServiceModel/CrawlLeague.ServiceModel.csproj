@@ -56,6 +56,7 @@
     <Compile Include="Types\CrawlerRefs.cs" />
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />
+    <Compile Include="Types\MorgueFile.cs" />
     <Compile Include="Types\ParticipantRefs.cs" />
     <Compile Include="Types\ParticipantStatusJoin.cs" />
     <Compile Include="Types\ParticipantStatus.cs" />

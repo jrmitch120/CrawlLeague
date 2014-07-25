@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Reflection;
 using System.Web;
 using CrawlLeague.Core.Game;
 using CrawlLeague.Core.Scrapping;
@@ -56,8 +55,10 @@ namespace CrawlLeague.Api
 
             container.RegisterAutoWiredAs<UriRequestRunner, IScraperRequestRunner>();
             container.RegisterAutoWiredAs<WebScraper, IScraper>();
+            container.RegisterAutoWiredAs<CrawlWebRunner, ICrawlRunner>();
+
             container.RegisterAutoWiredTypes(new[]
-            {typeof (CrawlerValidator), typeof (CrawlRunner), typeof (CrawlProcessor), typeof (GameEngine)});
+            {typeof (CrawlerValidator), typeof (CrawlProcessor), typeof (GameEngine)});
 
             //container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 

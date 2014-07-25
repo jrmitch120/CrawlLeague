@@ -39,7 +39,8 @@ namespace CrawlLeague.ServiceModel.Types
     public class GameFetchRequest
     {
         public int CrawlerId { get; set; }
-        public string ParticipantId { get; set; }
+        public int ParticipantId { get; set; }
         public string MorgueUrl { get; set; }
+        public int UtcOffset { get; set; }
     }
 }

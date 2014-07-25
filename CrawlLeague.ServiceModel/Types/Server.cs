@@ -25,6 +25,9 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Url of the server's morque list")]
         public string MorgueUrl { get; set; }
 
+        [Description("Utc offset for the server")]
+        public string UtcOffset { get; set; }
+
         [Description("Designates an active or inactive server")]
         public bool Active { get; set; }
 

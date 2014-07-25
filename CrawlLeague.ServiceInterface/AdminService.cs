@@ -38,7 +38,7 @@ namespace CrawlLeague.ServiceInterface
                         .Join<Participant, Season>(p => p.SeasonId, s => s.Id)
                         .Join<Server, Crawler>(s => s.Id, c => c.ServerId)
                         .Select<Participant>(p => new {ParticipantId = p.Id, p.CrawlerId})
-                        .Select<Server>(s => new {s.MorgueUrl})
+                        .Select<Server>(s => new {s.MorgueUrl, s.UtcOffset})
                         .Select<Crawler>(c => new {c.UserName})
                         .Select<Season>(s => new {s.CrawlVersion})
                         .Where<Participant>(p => p.SeasonId == season.Id) // Specific season
@@ -50,6 +50,7 @@ namespace CrawlLeague.ServiceInterface
                         CrawlerId = r.CrawlerId,
                         ParticipantId = r.ParticipantId,
                         MorgueUrl = new Server {MorgueUrl = r.MorgueUrl}.PlayerMorgueUrl(r.CrawlVersion, r.UserName),
+                        UtcOffset = r.UtcOffset
                     }));
 
                     seasonRequest.RoundProcessRequests.Add(roundRequest);
@@ -68,11 +69,7 @@ namespace CrawlLeague.ServiceInterface
             public string CrawlVersion { get; set; }
             public string ParticipantId { get; set; }
             public string MorgueUrl { get; set; }
-        }
-
-        public class TestMe2
-        {
-            public int CrawlerId { get; set; }
+            public int UtcOffset { get; set; }
         }
     }
 }

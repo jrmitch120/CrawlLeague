@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
-using CrawlLeague.ServiceModel.Types;
 
 namespace CrawlLeague.Core.Game
 {
     public class GameEngine
     {
-        private readonly CrawlRunner _runner;
+        private readonly ICrawlRunner _runner;
         private readonly CrawlProcessor _processor;
 
         private volatile bool _running;
         private Timer _timer;
         private readonly TimeSpan _runInterval = TimeSpan.FromMinutes(1);
 
-        public GameEngine(CrawlRunner runner, CrawlProcessor processor)
+        public GameEngine(ICrawlRunner runner, CrawlProcessor processor)
         {
             _runner = runner;
             _processor = processor;
