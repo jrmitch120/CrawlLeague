@@ -141,6 +141,10 @@
       <Project>{de3d3a36-8b8b-4c5f-857c-c9488788c081}</Project>
       <Name>CrawlLeague.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CrawlLeague.GameEngine\CrawlLeague.GameEngine.csproj">
+      <Project>{2e0639ec-9716-4f80-9ec2-44273929ea1c}</Project>
+      <Name>CrawlLeague.GameEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CrawlLeague.ServiceInterface\CrawlLeague.ServiceInterface.csproj">
       <Project>{fcd89665-7078-42b6-8f50-1d973014a030}</Project>
       <Name>CrawlLeague.ServiceInterface</Name>

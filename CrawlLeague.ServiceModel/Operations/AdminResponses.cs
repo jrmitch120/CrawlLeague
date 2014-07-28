@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using CrawlLeague.ServiceModel.Types;
-using CrawlLeague.ServiceModel.Util;
+﻿using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
 {
-    public class ProcessRequestsResponse : IHasResponseStatus
+    public class ProcessRequestResponse : IHasResponseStatus
     {
         public ProcessingRequest ProcessRequest { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
 
-        public ProcessRequestsResponse()
+        public ProcessRequestResponse()
         {
             ResponseStatus = new ResponseStatus();
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CrawlLeague.ServiceModel.Types;
 
-namespace CrawlLeague.Core.Game
+namespace CrawlLeague.GameEngine.Game
 {
     public interface ICrawlRunner
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CrawlLeague.ServiceModel.Types
 {   
@@ -21,6 +22,8 @@ namespace CrawlLeague.ServiceModel.Types
 
         public int SeasonId { get; set; }
 
+        public string CrawlVersion { get; set; }
+
         public List<RoundProcessRequest> RoundProcessRequests { get; private set; }
     }
 
@@ -40,6 +43,7 @@ namespace CrawlLeague.ServiceModel.Types
     {
         public int CrawlerId { get; set; }
         public int ParticipantId { get; set; }
+        public DateTime MorguesSince { get; set; }
         public string MorgueUrl { get; set; }
         public int UtcOffset { get; set; }
     }

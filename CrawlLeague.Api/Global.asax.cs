@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Web;
-using CrawlLeague.Core.Game;
+using CrawlLeague.GameEngine.Game;
 using CrawlLeague.Core.Scrapping;
 using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface;
@@ -58,7 +58,7 @@ namespace CrawlLeague.Api
             container.RegisterAutoWiredAs<CrawlWebRunner, ICrawlRunner>();
 
             container.RegisterAutoWiredTypes(new[]
-            {typeof (CrawlerValidator), typeof (CrawlProcessor), typeof (GameEngine)});
+            {typeof (CrawlerValidator), typeof (CrawlProcessor), typeof (LeagueEngine), typeof (LeagueServices)});
 
             //container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 
@@ -96,7 +96,7 @@ namespace CrawlLeague.Api
                     auditRow.ModifiedDate = DateTime.UtcNow;
             };
 
-            container.Resolve<GameEngine>().Start();
+            container.Resolve<LeagueEngine>().Start();
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using CrawlLeague.ServiceInterface.RequestFilters;
+﻿using System;
+using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
@@ -9,7 +10,7 @@ namespace CrawlLeague.ServiceInterface
     [ApiKey]
     public class AdminService : Service
     {
-        public ProcessRequestsResponse Get(FetchProcessRequests request)
+        public ProcessRequestResponse Get(FetchProcessRequest request)
         {
             var processingRequest = new ProcessingRequest();
 
@@ -17,7 +18,7 @@ namespace CrawlLeague.ServiceInterface
 
             foreach (Season season in seasonResp.Seasons)
             {
-                var seasonRequest = new SeasonProcessRequest {SeasonId = season.Id};
+                var seasonRequest = new SeasonProcessRequest {SeasonId = season.Id, CrawlVersion = season.CrawlVersion};
 
                 foreach (var round in season.RoundInformation.RoundsToProcess.Values)
                 {
@@ -40,7 +41,7 @@ namespace CrawlLeague.ServiceInterface
                         .Select<Participant>(p => new {ParticipantId = p.Id, p.CrawlerId})
                         .Select<Server>(s => new {s.MorgueUrl, s.UtcOffset})
                         .Select<Crawler>(c => new {c.UserName})
-                        .Select<Season>(s => new {s.CrawlVersion})
+                        .Select<Season>(s => new {s.CrawlVersion, SeasonStart = s.Start})
                         .Where<Participant>(p => p.SeasonId == season.Id) // Specific season
                         .And<Participant>(p => !Sql.In(p.CrawlerId, finishedCrawlers)) // Not played a game
                         .And<Crawler>(c => !c.Banned).ToSql());
@@ -50,7 +51,8 @@ namespace CrawlLeague.ServiceInterface
                         CrawlerId = r.CrawlerId,
                         ParticipantId = r.ParticipantId,
                         MorgueUrl = new Server {MorgueUrl = r.MorgueUrl}.PlayerMorgueUrl(r.CrawlVersion, r.UserName),
-                        UtcOffset = r.UtcOffset
+                        MorguesSince = r.LastProcessed == DateTime.MinValue ? r.SeasonStart : r.LastProcessed,
+                        UtcOffset = r.UtcOffset,
                     }));
 
                     seasonRequest.RoundProcessRequests.Add(roundRequest);
@@ -59,7 +61,7 @@ namespace CrawlLeague.ServiceInterface
                 processingRequest.SeasonProcessRequests.Add(seasonRequest);
             }
 
-            return new ProcessRequestsResponse {ProcessRequest = processingRequest};
+            return new ProcessRequestResponse {ProcessRequest = processingRequest};
         }
 
         public class TestMe
@@ -69,6 +71,8 @@ namespace CrawlLeague.ServiceInterface
             public int ParticipantId { get; set; }
             public string CrawlVersion { get; set; }
             public string MorgueUrl { get; set; }
+            public DateTime SeasonStart { get; set; }
+            public DateTime LastProcessed { get; set; }
             public int UtcOffset { get; set; }
         }
     }

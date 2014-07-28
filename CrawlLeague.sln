@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{EDEFC4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrawlLeague.Core", "CrawlLeague.Core\CrawlLeague.Core.csproj", "{DE3D3A36-8B8B-4C5F-857C-C9488788C081}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrawlLeague.GameEngine", "CrawlLeague.GameEngine\CrawlLeague.GameEngine.csproj", "{2E0639EC-9716-4F80-9EC2-44273929EA1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{DE3D3A36-8B8B-4C5F-857C-C9488788C081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE3D3A36-8B8B-4C5F-857C-C9488788C081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE3D3A36-8B8B-4C5F-857C-C9488788C081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E0639EC-9716-4F80-9EC2-44273929EA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E0639EC-9716-4F80-9EC2-44273929EA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E0639EC-9716-4F80-9EC2-44273929EA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E0639EC-9716-4F80-9EC2-44273929EA1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
