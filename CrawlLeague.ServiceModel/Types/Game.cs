@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CrawlLeague.ServiceModel.DataAnnotations;
 using ServiceStack.DataAnnotations;
 
@@ -35,6 +36,13 @@ namespace CrawlLeague.ServiceModel.Types
         [Description("Crawl league calculated score")]
         public int Score { get; set; }
 
+        [Description("Number of runes collected during the game")]
+        public int RuneCount { get; set; }
+
+        [Description("List of runes collected during the game")]
+        [Reference]
+        List<Rune> Runes { get; set; }
+        
         [Description("When the game was completed (UTC)")]
         public DateTime CompletedDate { get; set; }
     }

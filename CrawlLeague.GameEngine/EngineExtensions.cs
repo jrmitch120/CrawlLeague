@@ -1,4 +1,5 @@
-﻿using CrawlLeague.ServiceModel.Operations;
+﻿using System.Text.RegularExpressions;
+using CrawlLeague.ServiceModel.Operations;
 
 namespace CrawlLeague.GameEngine
 {
@@ -6,7 +7,14 @@ namespace CrawlLeague.GameEngine
     {
         public static void ParseMorgueForStats(this CreateGame game)
         {
-            game.Score = 100;
+            var match = Regex.Match(game.Morgue, "runes: (.+?)(?=You)", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
+
+            if (match.Success)
+            {
+                var runes = match.Groups[1].Value.Split(new[] {','});
+                game.Score += runes.Length*50;
+            }
         }
     }
 }
+

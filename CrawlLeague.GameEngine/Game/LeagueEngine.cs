@@ -39,9 +39,8 @@ namespace CrawlLeague.GameEngine.Game
                 {
                     foreach (var roundRequest in seasonRequest.RoundProcessRequests)
                     {
-                        var morgues = _runner.GetValidMorgues(roundRequest,
-                            new StandardMorgueValidator(seasonRequest.CrawlVersion));
-
+                        var morgues = _runner.GetValidMorgues(roundRequest, new StandardMorgueValidator(seasonRequest.CrawlVersion));
+                        
                         foreach (MorgueFile morgue in morgues)
                         {
                             var game = new CreateGame

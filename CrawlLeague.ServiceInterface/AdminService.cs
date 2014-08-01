@@ -4,6 +4,7 @@ using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
+using ServiceStack.Text;
 
 namespace CrawlLeague.ServiceInterface
 {
