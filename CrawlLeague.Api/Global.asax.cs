@@ -58,7 +58,7 @@ namespace CrawlLeague.Api
             container.RegisterAutoWiredAs<CrawlWebRunner, ICrawlRunner>();
 
             container.RegisterAutoWiredTypes(new[]
-            {typeof (CrawlerValidator), typeof (CrawlProcessor), typeof (LeagueEngine), typeof (LeagueServices)});
+            {typeof (CrawlerValidator), typeof (LeagueEngine), typeof (LeagueServices)});
 
             //container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using CrawlLeague.ServiceInterface;
+using CrawlLeague.GameEngine.Game.Validation;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 
@@ -9,17 +9,15 @@ namespace CrawlLeague.GameEngine.Game
     public class LeagueEngine
     {
         private readonly ICrawlRunner _runner;
-        private readonly CrawlProcessor _processor;
         private readonly LeagueServices _services;
 
         private volatile bool _running;
         private Timer _timer;
         private readonly TimeSpan _runInterval = TimeSpan.FromMinutes(1);
 
-        public LeagueEngine(ICrawlRunner runner, CrawlProcessor processor, LeagueServices services)
+        public LeagueEngine(ICrawlRunner runner, LeagueServices services)
         {
             _runner = runner;
-            _processor = processor;
             _services = services;
         }
 
@@ -43,6 +41,21 @@ namespace CrawlLeague.GameEngine.Game
                     {
                         var morgues = _runner.GetValidMorgues(roundRequest,
                             new StandardMorgueValidator(seasonRequest.CrawlVersion));
+
+                        foreach (MorgueFile morgue in morgues)
+                        {
+                            var game = new CreateGame
+                            {
+                                SeasonId = seasonRequest.SeasonId,
+                                CrawlerId = morgue.CrawlerId,
+                                CompletedDate = morgue.LastModified,
+                                Morgue = morgue.Contents
+                            };
+
+                            game.ParseMorgueForStats();
+
+                            _services.GameSvc.Post(game);
+                        }
                     }
                 }
 

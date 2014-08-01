@@ -5,12 +5,12 @@ namespace CrawlLeague.GameEngine.Game
     public class LeagueServices
     {
         public readonly AdminService AdminSvc;
-        public readonly ParticipantService ParticipantSvc;
+        public readonly GameService GameSvc;
 
-        public LeagueServices(AdminService adminSvc, ParticipantService participantSvc)
+        public LeagueServices(AdminService adminSvc, GameService gameSvc)
         {
             AdminSvc = adminSvc;
-            ParticipantSvc = participantSvc;
+            GameSvc = gameSvc;
         }
     }
 }

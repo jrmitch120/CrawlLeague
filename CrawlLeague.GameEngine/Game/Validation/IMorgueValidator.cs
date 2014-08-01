@@ -1,6 +1,6 @@
 ﻿using CrawlLeague.ServiceModel.Types;
 
-namespace CrawlLeague.GameEngine.Game
+namespace CrawlLeague.GameEngine.Game.Validation
 {
     public interface IMorgueValidator
     {

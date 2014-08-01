@@ -4,16 +4,32 @@ using ServiceStack.DataAnnotations;
 
 namespace CrawlLeague.ServiceModel.Types
 {
-    public class Game : IAudit
+    [CompositeIndex("Crawler", "SeasonId")]
+    public class Game : GameCore, IAudit
     {
         [AutoIncrement]
         public int Id { get; set; }
 
-        [ForeignKey(typeof(Participant))]
-        [Description("Id of the participant")]
-        public int ParticipantId { get; set; }
+        [Created]
+        public DateTime CreatedDate { get; set; }
+
+        [Modified]
+        public DateTime ModifiedDate { get; set; }
+    }
+
+    [Alias("Game")]
+    public abstract class GameCore
+    {
+        [ForeignKey(typeof(Crawler))]
+        [Description("Id of the crawler")]
+        public int CrawlerId { get; set; }
+
+        [ForeignKey(typeof(Season))]
+        [Description("Id of the Season")]
+        public int SeasonId { get; set; }
 
         [Description("Full morgue file")]
+        [CustomField("TEXT")]
         public string Morgue { get; set; }
 
         [Description("Crawl league calculated score")]
@@ -21,11 +37,5 @@ namespace CrawlLeague.ServiceModel.Types
 
         [Description("When the game was completed (UTC)")]
         public DateTime CompletedDate { get; set; }
-
-        [Created]
-        public DateTime CreatedDate { get; set; }
-
-        [Modified]
-        public DateTime ModifiedDate { get; set; }
     }
 }

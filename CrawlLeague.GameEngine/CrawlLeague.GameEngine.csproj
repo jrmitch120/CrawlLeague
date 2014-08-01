@@ -45,13 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\CrawlProcessor.cs" />
+    <Compile Include="EngineExtensions.cs" />
     <Compile Include="Game\CrawlRunner.cs" />
     <Compile Include="Game\LeagueEngine.cs" />
     <Compile Include="Game\ICrawlRunner.cs" />
-    <Compile Include="Game\IMorgueValidator.cs" />
+    <Compile Include="Game\Validation\IMorgueValidator.cs" />
     <Compile Include="Game\LeagueServices.cs" />
-    <Compile Include="Game\StandardMorgueValidator.cs" />
+    <Compile Include="Game\Validation\StandardMorgueValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

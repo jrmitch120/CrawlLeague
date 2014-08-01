@@ -23,17 +23,17 @@ namespace CrawlLeague.ServiceInterface
                 foreach (var round in season.RoundInformation.RoundsToProcess.Values)
                 {
                     var roundRequest = new RoundProcessRequest {Round = round};
-
+                    
+                    // Crawlers that have already played a game
                     var finishedCrawlers =
-                        Db.SqlColumn<int>(new JoinSqlBuilder<Game, Game>()
-                            .Join<Participant, Game>(p => p.Id, g => g.ParticipantId)
-                            .Select<Participant>(p => p.CrawlerId)
-                            .Where<Game>(
-                                x =>
-                                    x.CompletedDate >= round.Start &&
-                                    x.CompletedDate <= round.End)
-                            .And<Participant>(p => p.SeasonId == season.Id).ToSql());
+                        Db.SqlColumn<int>(
+                            Db.From<Game>()
+                                .Select(g => g.CrawlerId)
+                                .Where(g => g.CompletedDate >= round.Start)
+                                .And(g => g.CompletedDate <= round.End)
+                                .And(g => g.SeasonId == season.Id));
 
+                    // Crawlers that need a game (select crawlers excluding the completed crawlers)
                     var gamesNeeded = Db.Select<TestMe>(new JoinSqlBuilder<Participant, Participant>()
                         .Join<Crawler, Participant>(c => c.Id, p => p.CrawlerId)
                         .Join<Participant, Season>(p => p.SeasonId, s => s.Id)
@@ -46,6 +46,7 @@ namespace CrawlLeague.ServiceInterface
                         .And<Participant>(p => !Sql.In(p.CrawlerId, finishedCrawlers)) // Not played a game
                         .And<Crawler>(c => !c.Banned).ToSql());
 
+                    // Create lookup requests
                     gamesNeeded.ForEach(r => roundRequest.GameFetchRequests.Add(new GameFetchRequest
                     {
                         CrawlerId = r.CrawlerId,

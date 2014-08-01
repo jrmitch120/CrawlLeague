@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 
@@ -10,7 +9,7 @@ namespace CrawlLeague.ServiceModel.Operations
         int SeasonId { get; set; }
     }
 
-    [Route("/seasons/{SeasonId}/participants/{CrawlerId}/status", "GET", Summary = @"GET a specific participant's status.",
+    [Route("/seasons/{SeasonId}/crawlers/{CrawlerId}/status", "GET", Summary = @"GET a specific participant's status.",
     Notes = "This will return status for a participant.")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     [ApiResponse(HttpStatusCode.NotFound, "Season and/or Crawler was not found.")]
@@ -41,7 +40,7 @@ namespace CrawlLeague.ServiceModel.Operations
         //public DateTime NoGameSince { get; set; }
     }
 
-    [Route("/seasons/{SeasonId}/participants", "POST", Summary = @"CREATE a new crawler participant for a season",
+    [Route("/seasons/{SeasonId}/crawlers", "POST", Summary = @"CREATE a new crawler participant for a season",
     Notes = "This will create a crawler participant for a given season.  Subject to field validation.")]
     [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]

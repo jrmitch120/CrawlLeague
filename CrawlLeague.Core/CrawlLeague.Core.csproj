@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scrapping\ScrapperOptions.cs" />
+    <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Verification\CrawlerValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrapping\IScraper.cs" />

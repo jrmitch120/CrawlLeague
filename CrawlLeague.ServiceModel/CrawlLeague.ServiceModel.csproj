@@ -50,9 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Operations\AdminResponses.cs" />
+    <Compile Include="Operations\GameOperations.cs" />
     <Compile Include="Operations\ParticipantOperations.cs" />
     <Compile Include="Operations\ParticipantResponses.cs" />
     <Compile Include="Operations\AdminOperations.cs" />
+    <Compile Include="Operations\GameResponses.cs" />
     <Compile Include="Types\CrawlerRefs.cs" />
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />
