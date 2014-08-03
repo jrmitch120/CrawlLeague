@@ -1,7 +1,6 @@
-﻿using CrawlLeague.ServiceModel.Types;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
 
-namespace CrawlLeague.ServiceModel
+namespace CrawlLeague.ServiceModel.Types
 {
     public enum RuneType
     {
@@ -37,8 +36,8 @@ namespace CrawlLeague.ServiceModel
         [Description("Id of the Season")]
         public int SeasonId { get; set; }
 
-        [ForeignKey(typeof(Game))]
         [Description("Id of the Game")]
+        [References(typeof(Game))]
         public int GameId { get; set; }
 
         [Description("Type of the rune")]

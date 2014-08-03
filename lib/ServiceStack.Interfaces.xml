@@ -288,6 +288,11 @@
             Use to indicate that a property is a Calculated Field 
             </summary>
         </member>
+        <member name="T:ServiceStack.DataAnnotations.ExcludeAttribute">
+            <summary>
+            Mark types that are to be excluded from specified features
+            </summary>
+        </member>
         <member name="T:ServiceStack.DataAnnotations.DecimalLengthAttribute">
             <summary>
             Decimal length attribute.
@@ -331,6 +336,11 @@
         <member name="T:ServiceStack.DataAnnotations.MetaAttribute">
             <summary>
             Decorate any type or property with adhoc info
+            </summary>
+        </member>
+        <member name="T:ServiceStack.IHasResponseStatus">
+            <summary>
+            Contract indication that the Response DTO has a ResponseStatus
             </summary>
         </member>
         <member name="T:ServiceStack.Logging.DebugLogFactory">
@@ -604,11 +614,6 @@
             Logs the specified message.
             </summary>
             <param name="message">The message.</param>
-        </member>
-        <member name="T:ServiceStack.IHasResponseStatus">
-            <summary>
-            Contract indication that the Response DTO has a ResponseStatus
-            </summary>
         </member>
         <member name="T:ServiceStack.Logging.LogManager">
             <summary>
@@ -1205,6 +1210,12 @@
             <summary>
             A thin wrapper around each host's Response e.g: ASP.NET, HttpListener, MQ, etc
             </summary>
+        </member>
+        <member name="M:ServiceStack.Web.IResponse.Write(System.String)">
+            <summary>
+            Write once to the Response Stream then close it. 
+            </summary>
+            <param name="text"></param>
         </member>
         <member name="M:ServiceStack.Web.IResponse.Close">
             <summary>

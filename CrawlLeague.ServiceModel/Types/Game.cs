@@ -41,7 +41,7 @@ namespace CrawlLeague.ServiceModel.Types
 
         [Description("List of runes collected during the game")]
         [Reference]
-        List<Rune> Runes { get; set; }
+        public List<Rune> Runes { get; set; }
         
         [Description("When the game was completed (UTC)")]
         public DateTime CompletedDate { get; set; }

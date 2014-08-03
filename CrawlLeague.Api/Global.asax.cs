@@ -80,6 +80,7 @@ namespace CrawlLeague.Api
                 db.CreateTableIfNotExists<Crawler>();
                 db.CreateTableIfNotExists<Participant>();
                 db.CreateTableIfNotExists<Game>();
+                db.CreateTableIfNotExists<Rune>();
             }
 
             OrmLiteConfig.InsertFilter = (dbCmd, row) =>

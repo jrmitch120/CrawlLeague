@@ -12,7 +12,7 @@ namespace CrawlLeague.ServiceInterface
     {
         public GameResponse Get(FetchGame request)
         {
-            var game = Db.SingleById<Game>(request.Id);
+            var game = Db.LoadSingleById<Game>(request.Id);
 
             if (game == null)
                 throw new HttpError(HttpStatusCode.NotFound,
@@ -24,14 +24,18 @@ namespace CrawlLeague.ServiceInterface
         public HttpResult Post(CreateGame request)
         {
             var game = new Game().PopulateWith(request.SanitizeDtoHtml());
-            var newId = Db.Insert(game, selectIdentity: true);
-
-            return new HttpResult(new GameResponse {Game = Get(new FetchGame {Id = (int) newId}).Game})
+            var newId = (int)Db.Insert(game, selectIdentity: true);
+            
+            game.Id = newId;
+            
+            Db.SaveAllReferences(game);
+            
+            return new HttpResult(new GameResponse {Game = Get(new FetchGame {Id = newId}).Game})
             {
                 StatusCode = HttpStatusCode.Created,
                 Headers =
                 {
-                    {HttpHeaders.Location, new FetchGame {Id = (int) newId}.ToGetUrl()}
+                    {HttpHeaders.Location, new FetchGame {Id = newId}.ToGetUrl()}
                 }
             };
         }
