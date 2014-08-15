@@ -64,9 +64,6 @@ namespace CrawlLeague.GameEngine.Game
                 {
                     var games = Regex.Matches(indexResponses[gameRequest].Body, MorgueIndexRegex);
 
-                    DateTime serverStart = round.Start.AddHours(gameRequest.UtcOffset);
-                    DateTime serverEnd =  round.End.AddHours(gameRequest.UtcOffset);
-                    
                     foreach (Match game in games)
                     {
                         var morgue = new MorgueFile
@@ -77,7 +74,7 @@ namespace CrawlLeague.GameEngine.Game
                                   indexResponses[gameRequest].Uri.AbsolutePath + 
                                   game.Groups[1].ToString().Trim(),
                             FileName = game.Groups[2].ToString().Trim(),
-                            LastModified = DateTime.Parse(game.Groups[3].ToString()),
+                            LastModified = DateTime.Parse(game.Groups[3].ToString()).AddHours(gameRequest.UtcOffset),
                         };
 
                         // Don't look at morgues since the last process date.
@@ -86,12 +83,12 @@ namespace CrawlLeague.GameEngine.Game
 
                         // Games should be sorted by date descending.  In order to help speed up processing, quit
                         // if we've past the end date
-                        if (morgue.LastModified < serverStart)
+                        if (morgue.LastModified < round.Start)
                             break;
 
                         // Good morgue possibility.  Add it to list 
-                        if (morgue.LastModified < serverEnd)
-                            morgueFileRequests.Add(morgue,new ScraperRequest{Uri = new Uri(morgue.Url)});
+                        if (morgue.LastModified <= round.End)
+                            morgueFileRequests.Add(morgue, new ScraperRequest {Uri = new Uri(morgue.Url)});
                     }
                 }
             }

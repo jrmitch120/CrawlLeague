@@ -55,6 +55,7 @@
     <Compile Include="Operations\ParticipantResponses.cs" />
     <Compile Include="Operations\AdminOperations.cs" />
     <Compile Include="Operations\GameResponses.cs" />
+    <Compile Include="Types\Rune.cs" />
     <Compile Include="Types\CrawlerRefs.cs" />
     <Compile Include="Types\Crawler.cs" />
     <Compile Include="Types\Game.cs" />
