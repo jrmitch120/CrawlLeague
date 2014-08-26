@@ -13,7 +13,7 @@ namespace CrawlLeague.ServiceInterface
         public GameResponse Get(FetchGame request)
         {
             var game = Db.LoadSingleById<Game>(request.Id);
-
+            
             if (game == null)
                 throw new HttpError(HttpStatusCode.NotFound,
                     new ArgumentException("Game {0} does not exist. ".Fmt(request.Id)));
