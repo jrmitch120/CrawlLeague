@@ -6,6 +6,7 @@ using CrawlLeague.Core.Scrapping;
 using CrawlLeague.Core.Verification;
 using CrawlLeague.ServiceInterface;
 using CrawlLeague.ServiceInterface.RequestFilters;
+using CrawlLeague.ServiceInterface.Validation;
 using CrawlLeague.ServiceModel;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
@@ -59,6 +60,8 @@ namespace CrawlLeague.Api
 
             container.RegisterAutoWiredTypes(new[]
             {typeof (CrawlerValidator), typeof (LeagueEngine), typeof (LeagueServices)});
+
+            container.RegisterValidators(typeof(CreateSeasonValidator).Assembly);
 
             //container.RegisterAutoWired<GameEngine>().ReusedWithin(ReuseScope.Container);
 

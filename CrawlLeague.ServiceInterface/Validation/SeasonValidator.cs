@@ -14,7 +14,7 @@ namespace CrawlLeague.ServiceInterface.Validation
             {
                 validator.RuleFor(r => r.Name).NotEmpty();
                 validator.RuleFor(r => r.Description).NotEmpty();
-                validator.RuleFor(r => r.DaysPerRound).GreaterThan(2);
+                validator.RuleFor(r => r.DaysPerRound).GreaterThan(0);
                 validator.RuleFor(r => r.CrawlVersion).NotEmpty();
                 validator.RuleFor(r => r.Start).GreaterThan(DateTime.UtcNow);
                 validator.RuleFor(r => r.End)

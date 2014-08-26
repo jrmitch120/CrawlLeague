@@ -1,10 +1,10 @@
 ﻿using System;
+using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceInterface.RequestFilters;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 using ServiceStack;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
 
 namespace CrawlLeague.ServiceInterface
 {
@@ -14,17 +14,19 @@ namespace CrawlLeague.ServiceInterface
         public ProcessRequestResponse Get(FetchProcessRequest request)
         {
             var processingRequest = new ProcessingRequest();
-
-            var seasonResp = ResolveService<SeasonService>().Get(new FetchSeasons { NotFinal = true });
-
-            foreach (Season season in seasonResp.Seasons)
+            
+            foreach (Season season in ResolveService<SeasonService>().GetAll(new FetchSeasons { NotFinal = true }))
             {
-                var seasonRequest = new SeasonProcessRequest {SeasonId = season.Id, CrawlVersion = season.CrawlVersion};
+                var seasonRequest = new SeasonProcessRequest
+                {
+                    SeasonId = season.Id,
+                    CrawlVersion = season.CrawlVersion
+                };
 
                 foreach (var round in season.RoundInformation.RoundsToProcess.Values)
                 {
                     var roundRequest = new RoundProcessRequest {Round = round};
-                    
+
                     // Crawlers that have already played a game
                     var finishedCrawlers =
                         Db.SqlColumn<int>(

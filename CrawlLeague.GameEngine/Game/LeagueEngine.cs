@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using CrawlLeague.GameEngine.Game.Validation;
+using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel.Operations;
 using CrawlLeague.ServiceModel.Types;
 
@@ -56,9 +57,12 @@ namespace CrawlLeague.GameEngine.Game
                             _services.GameSvc.Post(game);
                         }
                     }
-                }
 
-                //Thread.Sleep(10000);
+                    var season = _services.SeasonSvc.Get(new FetchSeason { Id = seasonRequest.SeasonId }).Season;
+                    season.LastProcessed = DateTime.UtcNow;
+                    _services.SeasonSvc.Put(season.ToUpdateRequest());
+
+                }
             }
             // TODO: catch (Exception ex) { }
             finally

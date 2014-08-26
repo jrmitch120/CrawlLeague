@@ -69,6 +69,7 @@
     <Compile Include="AdminService.cs" />
     <Compile Include="Extensions\CrawlerServiceExtensions.cs" />
     <Compile Include="Extensions\OrmExtensions.cs" />
+    <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Extensions\UtilityExtensions.cs" />
     <Compile Include="GameService.cs" />
     <Compile Include="ParticipantService.cs" />
