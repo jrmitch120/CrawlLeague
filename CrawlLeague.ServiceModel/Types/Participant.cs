@@ -60,10 +60,10 @@ namespace CrawlLeague.ServiceModel.Types
     {
         [ForeignKey(typeof(Crawler))]
         [Description("Id of the crawler")]
-        public int CrawlerId { get; set; }
+        public virtual int CrawlerId { get; set; }
 
         [ForeignKey(typeof(Season))]
         [Description("Id of the season")]
-        public int SeasonId { get; set; }
+        public virtual int SeasonId { get; set; }
     }
 }

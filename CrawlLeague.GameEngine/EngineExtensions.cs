@@ -22,8 +22,6 @@ namespace CrawlLeague.GameEngine
 
                     game.Runes.Add(new Rune
                     {
-                        CrawlerId = game.CrawlerId,
-                        SeasonId = game.SeasonId,
                         Type = (RuneType)Enum.Parse(typeof(RuneType), runeName, true)
                     });
                 }

@@ -30,16 +30,6 @@ namespace CrawlLeague.ServiceModel.Types
         [IgnoreDataMember]
         public int Id { get; set; }
 
-        [ForeignKey(typeof(Crawler))]
-        [Description("Id of the crawler")]
-        [IgnoreDataMember]
-        public int CrawlerId { get; set; }
-
-        [ForeignKey(typeof(Season))]        
-        [Description("Id of the Season")]
-        [IgnoreDataMember]
-        public int SeasonId { get; set; }
-
         [Description("Id of the Game")]        
         [References(typeof(Game))]
         [IgnoreDataMember]

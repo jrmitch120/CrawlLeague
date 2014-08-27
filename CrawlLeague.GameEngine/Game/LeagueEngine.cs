@@ -64,6 +64,7 @@ namespace CrawlLeague.GameEngine.Game
 
                 }
             }
+            
             // TODO: catch (Exception ex) { }
             finally
             {

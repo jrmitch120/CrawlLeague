@@ -5,25 +5,37 @@ using ServiceStack;
 
 namespace CrawlLeague.ServiceModel.Operations
 {
-    public class ParticipantsResponse : IHasResponseStatus
+    public class ParticipantResponse : IHasResponseStatus
     {
-        public List<ParticipantStatus> Standings { get; set; }
-        public Paging Paging { get; set; }
+        public Participant Participant { get; set; }
+
         public ResponseStatus ResponseStatus { get; set; }
 
-        public ParticipantsResponse()
+        public ParticipantResponse()
         {
             ResponseStatus = new ResponseStatus();
         }
     }
 
-    public class ParticipantResponse : IHasResponseStatus
+    public class ParticipantsStatusResponse : IHasResponseStatus
+    {
+        public List<ParticipantStatus> Standings { get; set; }
+        public Paging Paging { get; set; }
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public ParticipantsStatusResponse()
+        {
+            ResponseStatus = new ResponseStatus();
+        }
+    }
+
+    public class ParticipantStatusResponse : IHasResponseStatus
     {
         public ParticipantStatus ParticipantStatus { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
 
-        public ParticipantResponse()
+        public ParticipantStatusResponse()
         {
             ResponseStatus = new ResponseStatus();
         }

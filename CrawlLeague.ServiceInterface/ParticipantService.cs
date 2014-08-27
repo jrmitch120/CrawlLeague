@@ -35,7 +35,20 @@ namespace CrawlLeague.ServiceInterface
             return participantStatus;
         }
 
-        public ParticipantsResponse Get(FetchParticipantStatuses request)
+        public ParticipantResponse Get(FetchParticipant request)
+        {
+            var result = Db.Single<Participant>(GenerateFetchParticipantSql(request));
+
+            if (result == null)
+                throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("No match was found."));
+
+            return new ParticipantResponse
+            {
+                Participant = result
+            };
+        }
+
+        public ParticipantsStatusResponse Get(FetchParticipantStatuses request)
         {
             var participants = new List<ParticipantStatus>();
 
@@ -44,21 +57,21 @@ namespace CrawlLeague.ServiceInterface
 
             results.ForEach(r => participants.Add(GenerateParticipantStatus(r)));
 
-            return new ParticipantsResponse
+            return new ParticipantsStatusResponse
             {
                 Standings = participants,
                 Paging = new Paging(Request.AbsoluteUri) { Page = request.Page ?? 1, TotalCount = count }
             };
         }
 
-        public ParticipantResponse Get(FetchParticipantStatus request)
+        public ParticipantStatusResponse Get(FetchParticipantStatus request)
         {
             var result = Db.Single<ParticipantStatusJoin>(GenerateFetchParticipantSql(request));
 
             if (result == null)
                 throw new HttpError(HttpStatusCode.NotFound, new ArgumentException("No match was found."));
 
-            return new ParticipantResponse
+            return new ParticipantStatusResponse
             {
                 ParticipantStatus = GenerateParticipantStatus(result)
             };
@@ -78,7 +91,7 @@ namespace CrawlLeague.ServiceInterface
                 .Select<Division>(d => new { DivisionName = d.Name })
                 .Select<Server>(s => new { ServerName = s.Name, ServerAbbreviation = s.Abbreviation })
                 .Where<Participant>(s => s.SeasonId == request.SeasonId);
-            
+
             jn.OrderByDescending<Participant>(p => p.Score);
 
             // Restricted by Crawler
@@ -139,7 +152,7 @@ namespace CrawlLeague.ServiceInterface
             var newId = Db.Insert(participant, selectIdentity: true);
 
             return
-                new HttpResult(new ParticipantResponse
+                new HttpResult(new ParticipantStatusResponse
                 {
                     ParticipantStatus =
                         Get(new FetchParticipantStatus

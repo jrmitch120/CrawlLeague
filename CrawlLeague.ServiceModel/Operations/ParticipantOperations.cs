@@ -9,11 +9,24 @@ namespace CrawlLeague.ServiceModel.Operations
         int SeasonId { get; set; }
     }
 
+    [Route("/seasons/{SeasonId}/crawlers/{CrawlerId}", "GET", Summary = @"GET a specific participant.",
+    Notes = "This will return a specific participant.")]
+    [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
+    [ApiResponse(HttpStatusCode.NotFound, "Season and/or Crawler was not found.")]
+    public class FetchParticipant : IParticipantRequest, IReturn<ParticipantResponse>
+    {
+        [ApiMember(Name = "SeasonId", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int SeasonId { get; set; }
+
+        [ApiMember(Name = "CrawlerId", Description = "Crawler Id", ParameterType = "path", DataType = "int", IsRequired = true)]
+        public int CrawlerId { get; set; }
+    }
+
     [Route("/seasons/{SeasonId}/crawlers/{CrawlerId}/status", "GET", Summary = @"GET a specific participant's status.",
     Notes = "This will return status for a participant.")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
     [ApiResponse(HttpStatusCode.NotFound, "Season and/or Crawler was not found.")]
-    public class FetchParticipantStatus : IParticipantRequest, IReturn<ParticipantResponse>
+    public class FetchParticipantStatus : IParticipantRequest, IReturn<ParticipantStatusResponse>
     {
         [ApiMember(Name = "SeasonId", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
         public int SeasonId { get; set; }
@@ -25,7 +38,7 @@ namespace CrawlLeague.ServiceModel.Operations
     [Route("/seasons/{SeasonId}/division/{DivisionId}/standings", "GET", Summary = @"GET the standings for a division.",
     Notes = "This will returned a paged list of seasons.")]
     [ApiResponse(HttpStatusCode.OK, "Operation successful.")]
-    public class FetchParticipantStatuses : IParticipantRequest, IReturn<ParticipantsResponse>
+    public class FetchParticipantStatuses : IParticipantRequest, IReturn<ParticipantsStatusResponse>
     {
         [ApiMember(Name = "SeasonId", Description = "Season Id", ParameterType = "path", DataType = "int", IsRequired = true)]
         public int SeasonId { get; set; }
@@ -45,7 +58,7 @@ namespace CrawlLeague.ServiceModel.Operations
     [ApiResponse(422, "Validation error.")]
     [ApiResponse(HttpStatusCode.Created, "Operation successful.")]
     [ApiResponse(HttpStatusCode.Unauthorized, "Invalid X-ApiKey header.")]
-    public class CreateParticipant : IReturn<ParticipantResponse>
+    public class CreateParticipant : IReturn<ParticipantStatusResponse>
     {
         [ApiMember(Name = "SeasonId", Description = "Id of the season to join", ParameterType = "path", DataType = "int", IsRequired = true)]
         public int SeasonId { get; set; }

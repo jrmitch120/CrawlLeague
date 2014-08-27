@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Net;
 using CrawlLeague.ServiceInterface.Extensions;
 using CrawlLeague.ServiceModel.Operations;
@@ -24,12 +25,24 @@ namespace CrawlLeague.ServiceInterface
         public HttpResult Post(CreateGame request)
         {
             var game = new Game().PopulateWith(request.SanitizeDtoHtml());
-            var newId = (int)Db.Insert(game, selectIdentity: true);
-            
-            game.Id = newId;
-            
-            Db.SaveAllReferences(game);
-            
+            int newId;
+            using (IDbTransaction trans = Db.OpenTransaction())
+            {
+                newId = (int) Db.Insert(game, selectIdentity: true);
+
+                var participant = ResolveService<ParticipantService>().Get(new FetchParticipantStatus { CrawlerId = game.CrawlerId, SeasonId = game.SeasonId }).ParticipantStatus;
+
+                // TODO Update particpant counts extension method.
+
+                Db.Update<Participant>(participant);
+                
+                game.Id = newId;
+
+                Db.SaveAllReferences(game);
+
+                trans.Commit();
+            }
+
             return new HttpResult(new GameResponse {Game = Get(new FetchGame {Id = newId}).Game})
             {
                 StatusCode = HttpStatusCode.Created,
