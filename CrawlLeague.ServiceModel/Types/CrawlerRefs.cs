@@ -4,6 +4,9 @@ namespace CrawlLeague.ServiceModel.Types
 {
     public class CrawlerRefs
     {
+        [Description("Link to the crawler")]
+        public string CrawlerRef { get; set; }
+
         [Description("Link to the server that the crawler is currently bound to")]
         public string ServerRef { get; set; }
 

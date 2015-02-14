@@ -5,7 +5,7 @@ namespace CrawlLeague.ServiceModel.Types
 {
     public enum RuneType
     {
-        Abysasal,
+        Abyssal,
         Barnacled,
         Bone,
         Dark,
@@ -28,6 +28,7 @@ namespace CrawlLeague.ServiceModel.Types
     public class Rune
     {
         [IgnoreDataMember]
+        [AutoIncrement]
         public int Id { get; set; }
 
         [Description("Id of the Game")]        

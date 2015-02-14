@@ -30,11 +30,12 @@ namespace CrawlLeague.ServiceInterface
             {
                 newId = (int) Db.Insert(game, selectIdentity: true);
 
-                var participant = ResolveService<ParticipantService>().Get(new FetchParticipantStatus { CrawlerId = game.CrawlerId, SeasonId = game.SeasonId }).ParticipantStatus;
+                // This is throwing because it maybe called without the Request with bombs creating hateoas urls
+                //var participant = ResolveService<ParticipantService>().Get(new FetchParticipantStatus { CrawlerId = game.CrawlerId, SeasonId = game.SeasonId }).ParticipantStatus;
 
                 // TODO Update particpant counts extension method.
 
-                Db.Update<Participant>(participant);
+                //Db.Update<Participant>(participant);
                 
                 game.Id = newId;
 

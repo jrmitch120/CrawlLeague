@@ -11,6 +11,7 @@ namespace CrawlLeague.ServiceInterface.Extensions
         {
             crawler.References = new CrawlerRefs
             {
+                CrawlerRef = request.GetBaseUrl().CombineWith(new FetchCrawler { Id = crawler.Id }.ToGetUrl()),
                 DivisionRef = request.GetBaseUrl().CombineWith(new FetchDivision { Id = crawler.DivisionId }.ToGetUrl()),
                 ServerRef = request.GetBaseUrl().CombineWith(new FetchServer { Id = crawler.ServerId }.ToGetUrl())
             };
